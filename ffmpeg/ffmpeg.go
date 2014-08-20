@@ -14,10 +14,9 @@ type FFmpeg struct {
 	SkipSeconds  int
 	Video        string
 	TmpDirectory string
-
-	cmdFFprobe string
-	cmdFFmpeg  string
-	cmdConvert string
+	cmdFFprobe   string
+	cmdFFmpeg    string
+	cmdConvert   string
 }
 
 // Creates and returns a new FFmpeg instance.
