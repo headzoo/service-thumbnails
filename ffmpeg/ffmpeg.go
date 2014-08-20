@@ -22,19 +22,14 @@ type FFmpeg struct {
 
 // Creates and returns a new FFmpeg instance.
 func NewFFmpeg(video string) *FFmpeg {
-	//ffmpeg_path := os.Getenv("HW_FFMPEG_PATH")
-	//if ffmpeg_path == "" {
-	//	panic("Environment variables HW_FFMPEG_PATH not set.")
-	//}
-
 	return &FFmpeg{
 		SkipSeconds:  0,
 		Video:        video,
 		TmpDirectory: "/tmp",
 
-		cmdFFprobe: "/home/sean/lib/FFmpeg/ffprobe",
-		cmdFFmpeg:  "/home/sean/lib/FFmpeg/ffmpeg",
-		cmdConvert: "/usr/bin/convert",
+		cmdFFprobe: "ffprobe",
+		cmdFFmpeg:  "ffmpeg",
+		cmdConvert: "convert",
 	}
 }
 
