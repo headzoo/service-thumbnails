@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"fmt"
+	"io/ioutil"
 )
 
 // FFmpeg is used to create thumbnails from videos.
@@ -98,11 +99,15 @@ func (f *FFmpeg) CreateThumbnail(width int, outFile string) error {
 // A thumbnail is generated every 'interval' seconds with a max width of 'width'.
 // The thumbnails are then stitched together into a single image written to 'outFile'.
 func (f *FFmpeg) CreateThumbnailSprite(interval, width int, outFile string) error {
-	os.Remove(outFile)
-	err := os.MkdirAll(f.TmpDirectory, os.FileMode(0755))
+	tmp, err := ioutil.TempDir(f.TmpDirectory, "thumb")
 	if err != nil {
 		return err
 	}
+	err = os.MkdirAll(tmp, os.FileMode(0755))
+	if err != nil {
+		return err
+	}
+	os.Remove(outFile)
 
 	filters := []string{
 		fmt.Sprintf("fps=fps=1/%d", interval),
@@ -119,7 +124,7 @@ func (f *FFmpeg) CreateThumbnailSprite(interval, width int, outFile string) erro
 		"image2",
 		"-vf",
 		strings.Join(filters, ","),
-		f.TmpDirectory + "/frames%04d.jpg",
+		tmp + "/frames%04d.jpg",
 	).Run()
 	if err != nil {
 		return err
@@ -127,7 +132,7 @@ func (f *FFmpeg) CreateThumbnailSprite(interval, width int, outFile string) erro
 
 	err = exec.Command(
 		f.cmdConvert,
-		f.TmpDirectory + "/*.jpg",
+		tmp + "/*.jpg",
 		"+append",
 		outFile,
 	).Run()
