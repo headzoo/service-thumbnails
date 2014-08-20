@@ -25,9 +25,9 @@ func NewFFmpeg(video string) *FFmpeg {
 		SkipSeconds:  0,
 		Video:        video,
 		TmpDirectory: "/tmp",
-		cmdFFprobe: "ffprobe",
-		cmdFFmpeg:  "ffmpeg",
-		cmdConvert: "convert",
+		cmdFFprobe:   "ffprobe",
+		cmdFFmpeg:    "ffmpeg",
+		cmdConvert:   "convert",
 	}
 }
 
