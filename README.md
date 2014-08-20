@@ -7,4 +7,4 @@ Used to create video thumbnails.
 * ImageMagick
 
 ### Installation
-`go install github.com/xdt/thumbnailer`
+`go install github.com/dulo-tech/thumbnailer`
