@@ -1,22 +1,22 @@
 package ffmpeg
 
 import (
+	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"strconv"
 	"strings"
-	"fmt"
-	"io/ioutil"
 )
 
 // FFmpeg is used to create thumbnails from videos.
 type FFmpeg struct {
-	SkipSeconds int
-	Video string
+	SkipSeconds  int
+	Video        string
 	TmpDirectory string
 
 	cmdFFprobe string
-	cmdFFmpeg string
+	cmdFFmpeg  string
 	cmdConvert string
 }
 
@@ -28,12 +28,12 @@ func NewFFmpeg(video string) *FFmpeg {
 	//}
 
 	return &FFmpeg{
-		SkipSeconds: 0,
-		Video: video,
+		SkipSeconds:  0,
+		Video:        video,
 		TmpDirectory: "/tmp",
 
 		cmdFFprobe: "/home/sean/lib/FFmpeg/ffprobe",
-		cmdFFmpeg: "/home/sean/lib/FFmpeg/ffmpeg",
+		cmdFFmpeg:  "/home/sean/lib/FFmpeg/ffmpeg",
 		cmdConvert: "/usr/bin/convert",
 	}
 }
@@ -124,7 +124,7 @@ func (f *FFmpeg) CreateThumbnailSprite(interval, width int, outFile string) erro
 		"image2",
 		"-vf",
 		strings.Join(filters, ","),
-		tmp + "/frames%04d.jpg",
+		tmp+"/frames%04d.jpg",
 	).Run()
 	if err != nil {
 		return err
@@ -132,7 +132,7 @@ func (f *FFmpeg) CreateThumbnailSprite(interval, width int, outFile string) erro
 
 	err = exec.Command(
 		f.cmdConvert,
-		tmp + "/*.jpg",
+		tmp+"/*.jpg",
 		"+append",
 		outFile,
 	).Run()
@@ -149,9 +149,9 @@ func SecondsToTime(secs int) string {
 		return "00:00:00"
 	}
 
-	hours  := secs / 3600;
-	minutes := (secs - (hours * 3600)) / 60;
-	seconds := secs - (hours * 3600) -  (minutes * 60);
+	hours := secs / 3600
+	minutes := (secs - (hours * 3600)) / 60
+	seconds := secs - (hours * 3600) - (minutes * 60)
 
 	return fmt.Sprintf("%.2d:%.2d:%.2d", hours, minutes, seconds)
 }
