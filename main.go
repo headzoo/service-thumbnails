@@ -1,8 +1,7 @@
 package main
 
 import (
-
-	 "github.com/headzoo/thumbnailer/ffmpeg"
+	 "github.com/dulo-tech/thumbnailer/ffmpeg"
 	"fmt"
 )
 
