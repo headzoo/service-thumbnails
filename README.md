@@ -3,6 +3,8 @@ thumbnailer
 Used to create video thumbnails.
 
 ### Requirements
+Both apps must be in your path.
+
 * FFmpeg
 * ImageMagick
 
