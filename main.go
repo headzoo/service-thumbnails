@@ -53,7 +53,7 @@ func main() {
 	flag.BoolVar(&opts.Verbose, "v", OPT_VERBOSE, "Verbose output.")
 	flag.StringVar(&opts.ThumbType, "t", OPT_THUMB_TYPE, "The type of thumbnail to generate.")
 	flag.StringVar(&opts.InFile, "i", OPT_IN_FILE, "The input video file. Separate multiple files with a comma.")
-	flag.StringVar(&opts.OutFile, "o", OPT_OUT_FILE, "The output image file. Separate multiple files with a comma.")
+	flag.StringVar(&opts.OutFile, "o", OPT_OUT_FILE, "The output image file.")
 	flag.IntVar(&opts.Width, "w", OPT_WIDTH, "The thumbnail width. Overrides the built in defaults.")
 	flag.IntVar(&opts.SkipSeconds, "s", OPT_SKIP_SECONDS, "Skip this number of seconds into the video before thubmnailing.")
 	flag.StringVar(&opts.TempDirectory, "d", OPT_TEMP_DIR, "Temp directory.")
@@ -67,16 +67,8 @@ func main() {
 	}
 
 	inFiles := strings.Split(opts.InFile, ",")
-	outFiles := strings.Split(opts.OutFile, ",")
 	for i, f := range inFiles {
 		inFiles[i] = strings.Trim(f, " ")
-	}
-	for i, f := range outFiles {
-		outFiles[i] = strings.Trim(f, " ")
-	}
-	if len(inFiles) != len(outFiles) {
-		verboseError("The number of in files must match the number of out files.")
-		os.Exit(1)
 	}
 	for _, file := range inFiles {
 		if !fileExists(file) {
@@ -88,11 +80,11 @@ func main() {
 	verbose(fmt.Sprintf("Thumbnailing %d video(s).", len(inFiles)))
 	if opts.ThumbType == "big" {
 		for i, file := range inFiles {
-			go createBigThumbnail(file, outFiles[i])
+			go createBigThumbnail(file, fmt.Sprintf(opts.OutFile, i))
 		}
 	} else if opts.ThumbType == "sprite" {
 		for i, file := range inFiles {
-			go createSpriteThumbnail(file, outFiles[i])
+			go createSpriteThumbnail(file, fmt.Sprintf(opts.OutFile, i))
 		}
 	} else {
 		printHelp()
@@ -182,7 +174,7 @@ func printHelp() {
 	fmt.Println("")
 	fmt.Println("EXAMPLE:")
 	fmt.Println("thumbnailer -v -t strip -i source.mp4 -o thumb.jpg")
-	fmt.Println("thumbnailer -v -t big -i source1.mp4,source2.mp4 -o out1.jpg,out2.jpg")
+	fmt.Println("thumbnailer -v -t big -i source1.mp4,source2.mp4 -o out%02d.jpg")
 
 	os.Exit(1)
 }
