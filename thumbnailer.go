@@ -113,7 +113,7 @@ func createSimpleThumbnail(inFile, outFile string) {
 		chanFinished <- true
 	}()
 
-	f := ffmpeg.NewFFmpeg(inFile)
+	f := ffmpeg.New(inFile)
 	f.SkipSeconds = opts.SkipSeconds
 
 	err := f.CreateThumbnail(opts.Width, outFile)
@@ -130,7 +130,7 @@ func createSpriteThumbnail(inFile, outFile string) {
 		chanFinished <- true
 	}()
 
-	f := ffmpeg.NewFFmpeg(inFile)
+	f := ffmpeg.New(inFile)
 	f.SkipSeconds = opts.SkipSeconds
 
 	len := int(f.Length())

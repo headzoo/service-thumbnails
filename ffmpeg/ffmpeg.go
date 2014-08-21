@@ -16,6 +16,13 @@ var (
 	CmdConvert    string
 )
 
+// VideoThumbnailer describes a type which creates thumbnails from videos.
+type VideoThumbnailer interface {
+	Length() float64
+	CreateThumbnail(int, string) error
+	CreateThumbnailSprite(int, int, string) error
+}
+
 // FFmpeg is used to create thumbnails from videos.
 type FFmpeg struct {
 	SkipSeconds int
@@ -23,7 +30,7 @@ type FFmpeg struct {
 }
 
 // Creates and returns a new FFmpeg instance.
-func NewFFmpeg(video string) *FFmpeg {
+func New(video string) *FFmpeg {
 	if TempDirectory == "" {
 		TempDirectory = os.TempDir()
 	}

@@ -105,7 +105,7 @@ func handleSimpleThumbnail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	temp := getTempFile()
-	ff := ffmpeg.NewFFmpeg(file.Temp)
+	ff := ffmpeg.New(file.Temp)
 	ff.SkipSeconds = skip
 
 	err := ff.CreateThumbnail(width, temp)
@@ -145,7 +145,7 @@ func handleSpriteThumbnail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	temp := getTempFile()
-	ff := ffmpeg.NewFFmpeg(file.Temp)
+	ff := ffmpeg.New(file.Temp)
 	ff.SkipSeconds = skip
 
 	interval := int(ff.Length())
