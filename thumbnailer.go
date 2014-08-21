@@ -21,16 +21,7 @@ var chanFinished = make(ChannelFinished)
 var chanError = make(ChannelError)
 
 func main() {
-	flag.BoolVar(&opts.PrintHelp, "help", thumbnailer.OPT_PRINT_HELP, "Display command help.")
-	flag.BoolVar(&opts.Verbose, "v", thumbnailer.OPT_VERBOSE, "Verbose output.")
-	flag.StringVar(&opts.ThumbType, "t", thumbnailer.OPT_THUMB_TYPE, "The type of thumbnail to generate. 'simple' is the default.")
-	flag.StringVar(&opts.InFile, "i", thumbnailer.OPT_IN_FILE, "The input video file. Separate multiple files with a comma.")
-	flag.StringVar(&opts.OutFile, "o", thumbnailer.OPT_OUT_FILE, "The output image file.")
-	flag.IntVar(&opts.Width, "w", thumbnailer.OPT_WIDTH, "The thumbnail width. Overrides the built in defaults.")
-	flag.IntVar(&opts.SkipSeconds, "s", thumbnailer.OPT_SKIP_SECONDS, "Skip this number of seconds into the video before thumbnailing.")
-	flag.IntVar(&opts.Count, "c", thumbnailer.OPT_COUNT, "Number of thumbs to generate in a sprite. 30 is the default.")
-	flag.Parse()
-
+	parseFlags()
 	if opts.PrintHelp || opts.InFile == "" || opts.OutFile == "" || opts.ThumbType == "" {
 		printHelp()
 	}
@@ -128,6 +119,50 @@ func createSpriteThumbnail(inFile, outFile string) {
 		return
 	}
 	verbose(fmt.Sprintf("Thumbnail written to file %q.", outFile))
+}
+
+// parseFlags parses the command line option flags.
+func parseFlags() {
+	flag.BoolVar(
+		&opts.PrintHelp,
+		"help",
+		thumbnailer.OPT_PRINT_HELP,
+		"Display command help.")
+	flag.BoolVar(
+		&opts.Verbose,
+		"v",
+		thumbnailer.OPT_VERBOSE,
+		"Verbose output.")
+	flag.StringVar(
+		&opts.ThumbType,
+		"t",
+		thumbnailer.OPT_THUMB_TYPE,
+		"The type of thumbnail to generate. 'simple' is the default.")
+	flag.StringVar(
+		&opts.InFile,
+		"i",
+		thumbnailer.OPT_IN_FILE,
+		"The input video file. Separate multiple files with a comma.")
+	flag.StringVar(
+		&opts.OutFile,
+		"o",
+		thumbnailer.OPT_OUT_FILE,
+		"The output image file.")
+	flag.IntVar(
+		&opts.Width,
+		"w", thumbnailer.OPT_WIDTH,
+		"The thumbnail width. Overrides the built in defaults.")
+	flag.IntVar(
+		&opts.SkipSeconds,
+		"s",
+		thumbnailer.OPT_SKIP_SECONDS,
+		"Skip this number of seconds into the video before thumbnailing.")
+	flag.IntVar(
+		&opts.Count,
+		"c",
+		thumbnailer.OPT_COUNT,
+		"Number of thumbs to generate in a sprite. 30 is the default.")
+	flag.Parse()
 }
 
 // printHelp() prints the command line help and exits.

@@ -44,12 +44,7 @@ var numRequests int
 var numErrors int
 
 func main() {
-	flag.BoolVar(&opts.PrintHelp, "help", thumbnailer.OPT_PRINT_HELP, "Display command help.")
-	flag.StringVar(&opts.Host, "h", thumbnailer.OPT_HOST, "The host name to listen on.")
-	flag.IntVar(&opts.Port, "p", thumbnailer.OPT_PORT, "The port to listen on.")
-	flag.IntVar(&opts.SkipSeconds, "s", thumbnailer.OPT_SKIP_SECONDS, "Skip this number of seconds into the video before thumbnailing.")
-	flag.IntVar(&opts.Count, "c", thumbnailer.OPT_COUNT, "Number of thumbs to generate in a sprite. 30 is the default.")
-	flag.Parse()
+	parseFlags()
 	if opts.PrintHelp {
 		printHelp()
 	}
@@ -285,6 +280,36 @@ func getTempFile() string {
 	temp, _ := ioutil.TempFile("/tmp", "thumb")
 	temp.Close()
 	return temp.Name()
+}
+
+// parseFlags parses the command line option flags.
+func parseFlags() {
+	flag.BoolVar(
+		&opts.PrintHelp, 
+		"help", 
+		thumbnailer.OPT_PRINT_HELP, 
+		"Display command help.")
+	flag.StringVar(
+		&opts.Host, 
+		"h", 
+		thumbnailer.OPT_HOST, 
+		"The host name to listen on.")
+	flag.IntVar(
+		&opts.Port, 
+		"p", 
+		thumbnailer.OPT_PORT, 
+		"The port to listen on.")
+	flag.IntVar(
+		&opts.SkipSeconds, 
+		"s", 
+		thumbnailer.OPT_SKIP_SECONDS, 
+		"Skip this number of seconds into the video before thumbnailing.")
+	flag.IntVar(
+		&opts.Count, 
+		"c", 
+		thumbnailer.OPT_COUNT, 
+		"Number of thumbs to generate in a sprite. 30 is the default.")
+	flag.Parse()
 }
 
 // printHelp() prints the command line help and exits.
