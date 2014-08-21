@@ -4,19 +4,19 @@ import (
 	"github.com/dulo-tech/thumbnailer/thumbnailer"
 	"net/http"
 	"strconv"
-	
+
 	"github.com/dulo-tech/go-pulse/pulse"
 )
 
 // PulseHandler is an HTTP handler for the pulse protocol.
 type PulseHandler struct {
-	opts *thumbnailer.Options
+	Handler
 }
 
 // NewPulse creates and returns a new PulseHandler instance.
 func NewPulse(opts *thumbnailer.Options) *PulseHandler {
 	return &PulseHandler{
-		opts: opts,
+		Handler: *New(opts),
 	}
 }
 

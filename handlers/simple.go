@@ -1,20 +1,20 @@
 package handlers
 
 import (
+	"github.com/dulo-tech/thumbnailer/ffmpeg"
 	"github.com/dulo-tech/thumbnailer/thumbnailer"
 	"net/http"
-	"github.com/dulo-tech/thumbnailer/ffmpeg"
 )
 
 // SimpleHandler is an HTTP handler for creating simple thumbnails.
 type SimpleHandler struct {
-	opts *thumbnailer.Options
+	Handler
 }
 
 // NewPulse creates and returns a new SimpleHandler instance.
 func NewSimple(opts *thumbnailer.Options) *SimpleHandler {
 	return &SimpleHandler{
-		opts: opts,
+		Handler: *New(opts),
 	}
 }
 

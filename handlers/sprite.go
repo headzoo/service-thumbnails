@@ -1,20 +1,20 @@
 package handlers
 
 import (
+	"github.com/dulo-tech/thumbnailer/ffmpeg"
 	"github.com/dulo-tech/thumbnailer/thumbnailer"
 	"net/http"
-	"github.com/dulo-tech/thumbnailer/ffmpeg"
 )
 
 // SpriteHandler is an HTTP handler for creating sprite thumbnails.
 type SpriteHandler struct {
-	opts *thumbnailer.Options
+	Handler
 }
 
 // NewSprite creates and returns a new SpriteHandler instance.
 func NewSprite(opts *thumbnailer.Options) *SpriteHandler {
 	return &SpriteHandler{
-		opts: opts,
+		Handler: *New(opts),
 	}
 }
 

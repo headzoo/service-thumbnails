@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"net/http"
 	"html/template"
+	"net/http"
 	"os"
-	
+
 	"github.com/dulo-tech/thumbnailer/thumbnailer"
 )
 
@@ -16,13 +16,13 @@ type HelpData struct {
 
 // HelpHandler is an HTTP handler for displaying a help page using HTML.
 type HelpHandler struct {
-	opts *thumbnailer.Options
+	Handler
 }
 
 // NewHelp creates and returns a new HelpHandler instance.
 func NewHelp(opts *thumbnailer.Options) *HelpHandler {
 	return &HelpHandler{
-		opts: opts,
+		Handler: *New(opts),
 	}
 }
 
@@ -32,16 +32,16 @@ func (h *HelpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		DefaultCount: h.opts.Count,
 		DefaultSkip:  h.opts.SkipSeconds,
 	}
-	
+
 	dir, _ := os.Getwd()
 	t, err := template.ParseFiles(dir + "/handlers/templates/help.html")
 	if err != nil {
-		//numErrors++
+		numErrors++
 		w.WriteHeader(500)
 		w.Write([]byte(err.Error()))
 		return
 	}
 
-	//numRequests++
+	numRequests++
 	t.Execute(w, data)
 }
