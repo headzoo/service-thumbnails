@@ -10,10 +10,17 @@ import (
 )
 
 var (
+	// TempDirectory points to a working directory.
 	TempDirectory string
-	CmdFFprobe    string
-	CmdFFmpeg     string
-	CmdConvert    string
+
+	// CmdFFprobe is the ffprobe command to use.
+	CmdFFprobe string
+
+	// CmdFFmpeg is the ffmpeg command to use.
+	CmdFFmpeg string
+
+	// CmdConvert is the convert command to use.
+	CmdConvert string
 )
 
 // VideoThumbnailer describes a type which creates thumbnails from videos.
@@ -29,7 +36,7 @@ type FFmpeg struct {
 	Video       string
 }
 
-// Creates and returns a new FFmpeg instance.
+// New creates and returns a new FFmpeg instance.
 func New(video string) *FFmpeg {
 	if TempDirectory == "" {
 		TempDirectory = os.TempDir()

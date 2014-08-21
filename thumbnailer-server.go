@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"html/template"
 	"io"
 	"io/ioutil"
@@ -9,8 +11,6 @@ import (
 	"os"
 	"strconv"
 
-	"flag"
-	"fmt"
 	"github.com/dulo-tech/go-pulse/pulse"
 	"github.com/dulo-tech/thumbnailer/ffmpeg"
 	"github.com/dulo-tech/thumbnailer/thumbnailer"
@@ -23,16 +23,6 @@ const (
 	DEFAULT_MIME_TYPE    = "binary/octet-stream"
 	DEFAULT_WIDTH_SIMPLE = 0
 	DEFAULT_WIDTH_SPRITE = 180
-)
-
-// Default values for command line options.
-const (
-	OPT_HOST         = "127.0.0.1"
-	OPT_PORT         = 8080
-	OPT_SKIP_SECONDS = 0
-	OPT_COUNT        = thumbnailer.NUM_THUMBNAILS
-	OPT_VERBOSE      = false
-	OPT_PRINT_HELP   = false
 )
 
 // Upload stores the values of an uploaded file.
@@ -49,25 +39,16 @@ type HelpData struct {
 	DefaultSkip  int
 }
 
-// Options stores the command line options.
-type Options struct {
-	Host        string
-	Port        int
-	SkipSeconds int
-	Count       int
-	PrintHelp   bool
-}
-
-var opts = Options{}
+var opts = thumbnailer.Options{}
 var numRequests int
 var numErrors int
 
 func main() {
-	flag.BoolVar(&opts.PrintHelp, "help", OPT_PRINT_HELP, "Display command help.")
-	flag.StringVar(&opts.Host, "h", OPT_HOST, "The host name to listen on.")
-	flag.IntVar(&opts.Port, "p", OPT_PORT, "The port to listen on.")
-	flag.IntVar(&opts.SkipSeconds, "s", OPT_SKIP_SECONDS, "Skip this number of seconds into the video before thumbnailing.")
-	flag.IntVar(&opts.Count, "c", OPT_COUNT, "Number of thumbs to generate in a sprite. 30 is the default.")
+	flag.BoolVar(&opts.PrintHelp, "help", thumbnailer.OPT_PRINT_HELP, "Display command help.")
+	flag.StringVar(&opts.Host, "h", thumbnailer.OPT_HOST, "The host name to listen on.")
+	flag.IntVar(&opts.Port, "p", thumbnailer.OPT_PORT, "The port to listen on.")
+	flag.IntVar(&opts.SkipSeconds, "s", thumbnailer.OPT_SKIP_SECONDS, "Skip this number of seconds into the video before thumbnailing.")
+	flag.IntVar(&opts.Count, "c", thumbnailer.OPT_COUNT, "Number of thumbs to generate in a sprite. 30 is the default.")
 	flag.Parse()
 	if opts.PrintHelp {
 		printHelp()
