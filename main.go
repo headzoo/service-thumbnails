@@ -4,8 +4,8 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/dulo-tech/thumbnailer/thumbnailer"
 	"github.com/dulo-tech/thumbnailer/ffmpeg"
+	"github.com/dulo-tech/thumbnailer/thumbnailer"
 	"os"
 	"strings"
 )
