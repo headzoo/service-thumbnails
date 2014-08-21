@@ -19,9 +19,15 @@ Thumbnailer currently creates two kinds of thumbnails: simple and sprite.
 ##### Simple
 A simple thumbnail is a single frame from the video. By default the size (width/height) of the thumbnail is the size of the video frame. A video with frames 640x480 will result in a thumbnail that is 640x480. The size can be adjusted by using the 'width' option from the command line app or HTTP server.
 
+Example:  
+![Example Simple](http://i.imgur.com/HZUEppZ.jpg)
+
 
 ##### Sprite
 A sprite thumbnail is two or more thumbnails from two or more video frames that have been stitched together into a single image. By default each thumbnail will be 180px wide, but can be changed using the 'width' option from the command line app or HTTP server. By default the sprite will always include 30 frames from the video, which have been chosen evenly from the full length of the video. That can be changed using the 'count' option from the command line or HTTP server.
+
+Example:  
+![Example Sprite](http://i.imgur.com/xSRxNbs.jpg)
 
 
 ### Command Line Usage
