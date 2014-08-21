@@ -45,13 +45,13 @@ var chanFinished = make(ChannelFinished)
 var chanError = make(ChannelError)
 
 func main() {
-	flag.BoolVar(&opts.PrintHelp, "h", OPT_PRINT_HELP, "Display command help.")
+	flag.BoolVar(&opts.PrintHelp, "help", OPT_PRINT_HELP, "Display command help.")
 	flag.BoolVar(&opts.Verbose, "v", OPT_VERBOSE, "Verbose output.")
 	flag.StringVar(&opts.ThumbType, "t", OPT_THUMB_TYPE, "The type of thumbnail to generate.")
 	flag.StringVar(&opts.InFile, "i", OPT_IN_FILE, "The input video file. Separate multiple files with a comma.")
 	flag.StringVar(&opts.OutFile, "o", OPT_OUT_FILE, "The output image file.")
 	flag.IntVar(&opts.Width, "w", OPT_WIDTH, "The thumbnail width. Overrides the built in defaults.")
-	flag.IntVar(&opts.SkipSeconds, "s", OPT_SKIP_SECONDS, "Skip this number of seconds into the video before thubmnailing.")
+	flag.IntVar(&opts.SkipSeconds, "s", OPT_SKIP_SECONDS, "Skip this number of seconds into the video before thumbnailing.")
 	flag.StringVar(&opts.TempDirectory, "d", OPT_TEMP_DIR, "Temp directory.")
 	flag.Parse()
 
