@@ -31,6 +31,7 @@ const (
 	OPT_PORT         = 8080
 	OPT_TEMP_DIR     = "/tmp"
 	OPT_SKIP_SECONDS = 0
+	OPT_COUNT        = thumbnailer.NUM_THUMBNAILS
 	OPT_VERBOSE      = false
 	OPT_PRINT_HELP   = false
 )
@@ -49,6 +50,7 @@ type Options struct {
 	Port          int
 	TempDirectory string
 	SkipSeconds   int
+	Count         int
 	PrintHelp     bool
 }
 
@@ -61,6 +63,7 @@ func main() {
 	flag.StringVar(&opts.Host, "h", OPT_HOST, "The host name to listen on.")
 	flag.IntVar(&opts.Port, "p", OPT_PORT, "The port to listen on.")
 	flag.IntVar(&opts.SkipSeconds, "s", OPT_SKIP_SECONDS, "Skip this number of seconds into the video before thumbnailing.")
+	flag.IntVar(&opts.Count, "c", OPT_COUNT, "Number of thumbs to generate in a sprite. 30 is the default.")
 	flag.StringVar(&opts.TempDirectory, "d", OPT_TEMP_DIR, "Temp directory.")
 	flag.Parse()
 	if opts.PrintHelp {
@@ -126,6 +129,7 @@ func handleSpriteThumbnail(w http.ResponseWriter, r *http.Request) {
 
 	width := DEFAULT_WIDTH_SPRITE
 	skip := opts.SkipSeconds
+	count := opts.Count
 
 	query := r.URL.Query()
 	if w, ok := query["width"]; ok {
@@ -134,6 +138,9 @@ func handleSpriteThumbnail(w http.ResponseWriter, r *http.Request) {
 	if s, ok := query["skip"]; ok {
 		skip = atoi(s[0])
 	}
+	if s, ok := query["count"]; ok {
+		count = atoi(s[0])
+	}
 
 	temp := getTempFile()
 	ff := ffmpeg.NewFFmpeg(file.Temp)
@@ -141,8 +148,8 @@ func handleSpriteThumbnail(w http.ResponseWriter, r *http.Request) {
 	ff.SkipSeconds = skip
 
 	interval := int(ff.Length())
-	if interval > thumbnailer.NUM_THUMBNAILS {
-		interval = interval / thumbnailer.NUM_THUMBNAILS
+	if interval > count {
+		interval = interval / count
 	}
 
 	err := ff.CreateThumbnailSprite(interval, width, temp)
