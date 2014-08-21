@@ -12,7 +12,7 @@ import (
 
 // Default values for command line options.
 const (
-	OPT_THUMB_TYPE   = "big"
+	OPT_THUMB_TYPE   = "simple"
 	OPT_IN_FILE      = ""
 	OPT_OUT_FILE     = ""
 	OPT_WIDTH        = 0
@@ -47,7 +47,7 @@ var chanError = make(ChannelError)
 func main() {
 	flag.BoolVar(&opts.PrintHelp, "help", OPT_PRINT_HELP, "Display command help.")
 	flag.BoolVar(&opts.Verbose, "v", OPT_VERBOSE, "Verbose output.")
-	flag.StringVar(&opts.ThumbType, "t", OPT_THUMB_TYPE, "The type of thumbnail to generate. 'Big' is the default.")
+	flag.StringVar(&opts.ThumbType, "t", OPT_THUMB_TYPE, "The type of thumbnail to generate. 'simple' is the default.")
 	flag.StringVar(&opts.InFile, "i", OPT_IN_FILE, "The input video file. Separate multiple files with a comma.")
 	flag.StringVar(&opts.OutFile, "o", OPT_OUT_FILE, "The output image file.")
 	flag.IntVar(&opts.Width, "w", OPT_WIDTH, "The thumbnail width. Overrides the built in defaults.")
@@ -58,7 +58,7 @@ func main() {
 	if opts.PrintHelp || opts.InFile == "" || opts.OutFile == "" || opts.ThumbType == "" {
 		printHelp()
 	}
-	if opts.ThumbType != "sprite" && opts.ThumbType != "big" {
+	if opts.ThumbType != "sprite" && opts.ThumbType != "simple" {
 		printHelp()
 	}
 
@@ -82,7 +82,7 @@ func main() {
 		if opts.ThumbType == "sprite" {
 			go createSpriteThumbnail(file, out)
 		} else {
-			go createBigThumbnail(file, out)
+			go createSimpleThumbnail(file, out)
 		}
 	}
 
@@ -107,8 +107,8 @@ func main() {
 	}
 }
 
-// createBigThumbnail creates a big thumbnail.
-func createBigThumbnail(inFile, outFile string) {
+// createSimpleThumbnail creates a simple thumbnail.
+func createSimpleThumbnail(inFile, outFile string) {
 	defer func() {
 		chanFinished <- true
 	}()
@@ -161,7 +161,7 @@ func printHelp() {
 	fmt.Printf("Thumbnailer v%s\n", thumbnailer.VERSION)
 	fmt.Println("")
 	fmt.Println("USAGE:")
-	fmt.Println("thumbnailer -t <sprite|big> -i <video> -o <image>")
+	fmt.Println("thumbnailer -t <sprite|simple> -i <video> -o <image>")
 	fmt.Println("")
 	fmt.Println("OPTIONS:")
 	flag.VisitAll(func(f *flag.Flag) {
@@ -170,7 +170,7 @@ func printHelp() {
 	fmt.Println("")
 	fmt.Println("EXAMPLE:")
 	fmt.Println("thumbnailer -v -t sprite -i source.mp4 -o thumb.jpg")
-	fmt.Println("thumbnailer -v -t big -i source1.mp4,source2.mp4 -o out%02d.jpg")
+	fmt.Println("thumbnailer -v -i source1.mp4,source2.mp4 -o out%02d.jpg")
 
 	os.Exit(1)
 }

@@ -21,7 +21,7 @@ import (
 const (
 	MAX_MEMORY           = 1 * 1024 * 1024
 	DEFAULT_MIME_TYPE    = "binary/octet-stream"
-	DEFAULT_WIDTH_BIG    = 0
+	DEFAULT_WIDTH_SIMPLE    = 0
 	DEFAULT_WIDTH_SPRITE = 180
 )
 
@@ -67,7 +67,7 @@ func main() {
 		printHelp()
 	}
 
-	http.HandleFunc("/thumbnail/big", handleBigThumbnail)
+	http.HandleFunc("/thumbnail/simple", handleSimpleThumbnail)
 	http.HandleFunc("/thumbnail/sprite", handleSpriteThumbnail)
 	http.HandleFunc("/help", handleHelp)
 	http.HandleFunc("/pulse", handlePulse)
@@ -80,14 +80,14 @@ func main() {
 	}
 }
 
-// handleBigThumbnail is the http callback to create a big thumbnail.
-func handleBigThumbnail(w http.ResponseWriter, r *http.Request) {
+// handleSimpleThumbnail is the http callback to create a simple thumbnail.
+func handleSimpleThumbnail(w http.ResponseWriter, r *http.Request) {
 	file := getFile(w, r)
 	if file == nil {
 		return
 	}
 
-	width := DEFAULT_WIDTH_BIG
+	width := DEFAULT_WIDTH_SIMPLE
 	skip := opts.SkipSeconds
 
 	query := r.URL.Query()
