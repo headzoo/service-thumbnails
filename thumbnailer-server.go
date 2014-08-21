@@ -29,7 +29,6 @@ const (
 const (
 	OPT_HOST         = "127.0.0.1"
 	OPT_PORT         = 8080
-	OPT_TEMP_DIR     = "/tmp"
 	OPT_SKIP_SECONDS = 0
 	OPT_COUNT        = thumbnailer.NUM_THUMBNAILS
 	OPT_VERBOSE      = false
@@ -52,12 +51,11 @@ type HelpData struct {
 
 // Options stores the command line options.
 type Options struct {
-	Host          string
-	Port          int
-	TempDirectory string
-	SkipSeconds   int
-	Count         int
-	PrintHelp     bool
+	Host        string
+	Port        int
+	SkipSeconds int
+	Count       int
+	PrintHelp   bool
 }
 
 var opts = Options{}
@@ -70,7 +68,6 @@ func main() {
 	flag.IntVar(&opts.Port, "p", OPT_PORT, "The port to listen on.")
 	flag.IntVar(&opts.SkipSeconds, "s", OPT_SKIP_SECONDS, "Skip this number of seconds into the video before thumbnailing.")
 	flag.IntVar(&opts.Count, "c", OPT_COUNT, "Number of thumbs to generate in a sprite. 30 is the default.")
-	flag.StringVar(&opts.TempDirectory, "d", OPT_TEMP_DIR, "Temp directory.")
 	flag.Parse()
 	if opts.PrintHelp {
 		printHelp()
@@ -109,7 +106,6 @@ func handleSimpleThumbnail(w http.ResponseWriter, r *http.Request) {
 
 	temp := getTempFile()
 	ff := ffmpeg.NewFFmpeg(file.Temp)
-	ff.TmpDirectory = opts.TempDirectory
 	ff.SkipSeconds = skip
 
 	err := ff.CreateThumbnail(width, temp)
@@ -150,7 +146,6 @@ func handleSpriteThumbnail(w http.ResponseWriter, r *http.Request) {
 
 	temp := getTempFile()
 	ff := ffmpeg.NewFFmpeg(file.Temp)
-	ff.TmpDirectory = opts.TempDirectory
 	ff.SkipSeconds = skip
 
 	interval := int(ff.Length())

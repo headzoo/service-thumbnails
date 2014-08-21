@@ -9,32 +9,44 @@ import (
 	"strings"
 )
 
+var (
+	TempDirectory string
+	CmdFFprobe    string
+	CmdFFmpeg     string
+	CmdConvert    string
+)
+
 // FFmpeg is used to create thumbnails from videos.
 type FFmpeg struct {
-	SkipSeconds  int
-	Video        string
-	TmpDirectory string
-	cmdFFprobe   string
-	cmdFFmpeg    string
-	cmdConvert   string
+	SkipSeconds int
+	Video       string
 }
 
 // Creates and returns a new FFmpeg instance.
 func NewFFmpeg(video string) *FFmpeg {
+	if TempDirectory == "" {
+		TempDirectory = os.TempDir()
+	}
+	if CmdFFprobe == "" {
+		CmdFFprobe = "ffprobe"
+	}
+	if CmdFFmpeg == "" {
+		CmdFFmpeg = "ffmpeg"
+	}
+	if CmdConvert == "" {
+		CmdConvert = "convert"
+	}
+
 	return &FFmpeg{
-		SkipSeconds:  0,
-		Video:        video,
-		TmpDirectory: "/tmp",
-		cmdFFprobe:   "ffprobe",
-		cmdFFmpeg:    "ffmpeg",
-		cmdConvert:   "convert",
+		SkipSeconds: 0,
+		Video:       video,
 	}
 }
 
 // Length returns the length of the video in seconds.
 func (f *FFmpeg) Length() float64 {
 	output, err := exec.Command(
-		f.cmdFFprobe,
+		CmdFFprobe,
 		"-i",
 		f.Video,
 		"-v",
@@ -79,7 +91,7 @@ func (f *FFmpeg) CreateThumbnail(width int, outFile string) error {
 	}
 	args = append(args, outFile)
 
-	err := exec.Command(f.cmdFFmpeg, args...).Run()
+	err := exec.Command(CmdFFmpeg, args...).Run()
 	if err != nil {
 		return err
 	}
@@ -92,7 +104,7 @@ func (f *FFmpeg) CreateThumbnail(width int, outFile string) error {
 // A thumbnail is generated every 'interval' seconds with a max width of 'width'.
 // The thumbnails are then stitched together into a single image written to 'outFile'.
 func (f *FFmpeg) CreateThumbnailSprite(interval, width int, outFile string) error {
-	tmp, err := ioutil.TempDir(f.TmpDirectory, "thumb")
+	tmp, err := ioutil.TempDir(TempDirectory, "thumb")
 	if err != nil {
 		return err
 	}
@@ -108,7 +120,7 @@ func (f *FFmpeg) CreateThumbnailSprite(interval, width int, outFile string) erro
 	}
 
 	err = exec.Command(
-		f.cmdFFmpeg,
+		CmdFFmpeg,
 		"-i",
 		f.Video,
 		"-ss",
@@ -124,7 +136,7 @@ func (f *FFmpeg) CreateThumbnailSprite(interval, width int, outFile string) erro
 	}
 
 	err = exec.Command(
-		f.cmdConvert,
+		CmdConvert,
 		tmp+"/*.jpg",
 		"+append",
 		outFile,
