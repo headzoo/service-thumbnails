@@ -53,6 +53,8 @@ type Options struct {
 }
 
 var opts = Options{}
+var numRequests int
+var numErrors int
 
 func main() {
 	flag.BoolVar(&opts.PrintHelp, "help", OPT_PRINT_HELP, "Display command help.")
@@ -103,11 +105,13 @@ func handleBigThumbnail(w http.ResponseWriter, r *http.Request) {
 
 	err := ff.CreateThumbnail(width, temp)
 	if err != nil {
+		numErrors++
 		w.WriteHeader(500)
 		w.Write([]byte(err.Error()))
 		return
 	}
 
+	numRequests++
 	w.Header().Set("Content-Disposition", "attachment; filename=thumbnail.jpg")
 	w.Header().Set("Content-Type", "image/jpeg")
 	writeFileToResponse(temp, w)
@@ -143,11 +147,13 @@ func handleSpriteThumbnail(w http.ResponseWriter, r *http.Request) {
 
 	err := ff.CreateThumbnailSprite(interval, width, temp)
 	if err != nil {
+		numErrors++
 		w.WriteHeader(500)
 		w.Write([]byte(err.Error()))
 		return
 	}
 
+	numRequests++
 	w.Header().Set("Content-Disposition", "attachment; filename=thumbnail.jpg")
 	w.Header().Set("Content-Type", "image/jpeg")
 	writeFileToResponse(temp, w)
@@ -157,11 +163,13 @@ func handleSpriteThumbnail(w http.ResponseWriter, r *http.Request) {
 func handleHelp(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("./templates/help.html")
 	if err != nil {
+		numErrors++
 		w.WriteHeader(500)
 		w.Write([]byte(err.Error()))
 		return
 	}
 
+	numRequests++
 	t.Execute(w, "T")
 }
 
@@ -178,6 +186,9 @@ func handlePulse(w http.ResponseWriter, r *http.Request) {
 		p.RequestHeaders[key] = headers[0]
 	}
 
+	numRequests++
+	p.Set("num-requests", strconv.Itoa(numRequests))
+	p.Set("num-errors", strconv.Itoa(numErrors))
 	for key, value := range p.ResponseHeaders() {
 		w.Header().Set(key, value)
 	}
@@ -189,10 +200,12 @@ func handlePulse(w http.ResponseWriter, r *http.Request) {
 func getFile(w http.ResponseWriter, r *http.Request) *Upload {
 	files, _ := writeUploadedFiles(r)
 	if len(files) > 1 {
+		numErrors++
 		w.WriteHeader(400)
 		w.Write([]byte("Only a single file allowed."))
 		return nil
 	} else if len(files) == 0 {
+		numErrors++
 		w.WriteHeader(400)
 		w.Write([]byte("No files uploaded."))
 		return nil
@@ -205,6 +218,7 @@ func getFile(w http.ResponseWriter, r *http.Request) *Upload {
 // writeUploadedFiles writes all uploaded files to the temp dir.
 func writeUploadedFiles(r *http.Request) ([]Upload, error) {
 	if err := r.ParseMultipartForm(MAX_MEMORY); err != nil {
+		numErrors++
 		return nil, err
 	}
 
@@ -213,17 +227,20 @@ func writeUploadedFiles(r *http.Request) ([]Upload, error) {
 		for _, fileHeader := range fileHeaders {
 			fin, err := fileHeader.Open()
 			if err != nil {
+				numErrors++
 				return nil, err
 			}
 
 			fout, err := ioutil.TempFile("/tmp", "upload")
 			if err != nil {
+				numErrors++
 				return nil, err
 			}
 			defer fout.Close()
 
 			size, err := io.Copy(fout, fin)
 			if err != nil {
+				numErrors++
 				return nil, err
 			}
 			fout.Close()
@@ -244,6 +261,7 @@ func writeUploadedFiles(r *http.Request) ([]Upload, error) {
 func writeFileToResponse(file string, w http.ResponseWriter) error {
 	fout, err := os.Open(file)
 	if err != nil {
+		numErrors++
 		return err
 	}
 	defer fout.Close()
@@ -256,11 +274,13 @@ func writeFileToResponse(file string, w http.ResponseWriter) error {
 func getMimeType(file string) string {
 	mm, err := magicmime.New(magicmime.MAGIC_MIME_TYPE | magicmime.MAGIC_SYMLINK | magicmime.MAGIC_ERROR)
 	if err != nil {
+		numErrors++
 		return DEFAULT_MIME_TYPE
 	}
 
 	mimetype, err := mm.TypeByFile(file)
 	if err != nil {
+		numErrors++
 		return DEFAULT_MIME_TYPE
 	}
 
@@ -296,6 +316,7 @@ func printHelp() {
 func atoi(a string) int {
 	i, err := strconv.Atoi(a)
 	if err != nil {
+		numErrors++
 		i = 0
 	}
 
