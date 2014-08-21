@@ -12,7 +12,7 @@ import (
 
 // Default values for command line options.
 const (
-	OPT_THUMB_TYPE   = ""
+	OPT_THUMB_TYPE   = "big"
 	OPT_IN_FILE      = ""
 	OPT_OUT_FILE     = ""
 	OPT_WIDTH        = 0
@@ -47,7 +47,7 @@ var chanError = make(ChannelError)
 func main() {
 	flag.BoolVar(&opts.PrintHelp, "help", OPT_PRINT_HELP, "Display command help.")
 	flag.BoolVar(&opts.Verbose, "v", OPT_VERBOSE, "Verbose output.")
-	flag.StringVar(&opts.ThumbType, "t", OPT_THUMB_TYPE, "The type of thumbnail to generate.")
+	flag.StringVar(&opts.ThumbType, "t", OPT_THUMB_TYPE, "The type of thumbnail to generate. 'Big' is the default.")
 	flag.StringVar(&opts.InFile, "i", OPT_IN_FILE, "The input video file. Separate multiple files with a comma.")
 	flag.StringVar(&opts.OutFile, "o", OPT_OUT_FILE, "The output image file.")
 	flag.IntVar(&opts.Width, "w", OPT_WIDTH, "The thumbnail width. Overrides the built in defaults.")
@@ -74,16 +74,16 @@ func main() {
 	}
 
 	verbose(fmt.Sprintf("Thumbnailing %d video(s).", len(inFiles)))
-	if opts.ThumbType == "big" {
-		for i, file := range inFiles {
-			go createBigThumbnail(file, fmt.Sprintf(opts.OutFile, i))
+	for i, file := range inFiles {
+		out := opts.OutFile
+		if strings.Contains(out, "%") {
+			out = fmt.Sprintf(out, i)
 		}
-	} else if opts.ThumbType == "sprite" {
-		for i, file := range inFiles {
-			go createSpriteThumbnail(file, fmt.Sprintf(opts.OutFile, i))
+		if opts.ThumbType == "sprite" {
+			go createSpriteThumbnail(file, out)
+		} else {
+			go createBigThumbnail(file, out)
 		}
-	} else {
-		printHelp()
 	}
 
 	finished := 0
@@ -169,7 +169,7 @@ func printHelp() {
 	})
 	fmt.Println("")
 	fmt.Println("EXAMPLE:")
-	fmt.Println("thumbnailer -v -t strip -i source.mp4 -o thumb.jpg")
+	fmt.Println("thumbnailer -v -t sprite -i source.mp4 -o thumb.jpg")
 	fmt.Println("thumbnailer -v -t big -i source1.mp4,source2.mp4 -o out%02d.jpg")
 
 	os.Exit(1)
