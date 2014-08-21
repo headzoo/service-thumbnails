@@ -14,7 +14,7 @@
                     <br/>Possible query arguments:
                     <ul>
                         <li>width - The width of the thumbnail. Defaults to the width of the video.</li>
-                        <li>skip - Skip this number of seconds into the video. Defaults to 0.</li>
+                        <li>skip - Skip this number of seconds into the video. Defaults to {{.DefaultSkip}}.</li>
                     </ul>
                 </p>
             </li>
@@ -24,9 +24,9 @@
                     Generates a sprite thumbnail from an uploaded video. A single video must be uploaded.
                     <br/>Possible query arguments:
                     <ul>
-                        <li>width - The width of the thumbnail. Defaults to the width of the video.</li>
-                        <li>skip - Skip this number of seconds into the video. Defaults to 0.</li>
-                        <li>count - The number of thumbnails to include in the sprite. Defaults to 30.</li>
+                        <li>width - The width of the thumbnail. Defaults to 180px wide maintaining aspect ratio.</li>
+                        <li>skip - Skip this number of seconds into the video. Defaults to {{.DefaultSkip}}.</li>
+                        <li>count - The number of thumbnails to include in the sprite. Defaults to {{.DefaultCount}}.</li>
                     </ul>
                 </p>
             </li>

@@ -44,6 +44,12 @@ type Upload struct {
 	Temp     string
 }
 
+// HelpData stores template variables for the help page.
+type HelpData struct {
+	DefaultCount int
+	DefaultSkip  int
+}
+
 // Options stores the command line options.
 type Options struct {
 	Host          string
@@ -168,6 +174,10 @@ func handleSpriteThumbnail(w http.ResponseWriter, r *http.Request) {
 
 // handleHelp is the http callback to display the help page.
 func handleHelp(w http.ResponseWriter, r *http.Request) {
+	data := HelpData{
+		DefaultCount: opts.Count,
+		DefaultSkip: opts.SkipSeconds,
+	}
 	t, err := template.ParseFiles("./templates/help.html")
 	if err != nil {
 		numErrors++
@@ -177,7 +187,7 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	numRequests++
-	t.Execute(w, "T")
+	t.Execute(w, data)
 }
 
 // handleHelp is the http callback to handle Pulse Protocol requests.
