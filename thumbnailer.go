@@ -17,6 +17,7 @@ const (
 	OPT_OUT_FILE     = ""
 	OPT_WIDTH        = 0
 	OPT_SKIP_SECONDS = 0
+	OPT_COUNT        = thumbnailer.NUM_THUMBNAILS
 	OPT_TEMP_DIR     = "/tmp"
 	OPT_VERBOSE      = false
 	OPT_PRINT_HELP   = false
@@ -35,6 +36,7 @@ type Options struct {
 	OutFile       string
 	Width         int
 	SkipSeconds   int
+	Count         int
 	TempDirectory string
 	Verbose       bool
 	PrintHelp     bool
@@ -52,6 +54,7 @@ func main() {
 	flag.StringVar(&opts.OutFile, "o", OPT_OUT_FILE, "The output image file.")
 	flag.IntVar(&opts.Width, "w", OPT_WIDTH, "The thumbnail width. Overrides the built in defaults.")
 	flag.IntVar(&opts.SkipSeconds, "s", OPT_SKIP_SECONDS, "Skip this number of seconds into the video before thumbnailing.")
+	flag.IntVar(&opts.Count, "c", OPT_COUNT, "Number of thumbs to generate in a sprite. 30 is the default.")
 	flag.StringVar(&opts.TempDirectory, "d", OPT_TEMP_DIR, "Temp directory.")
 	flag.Parse()
 
@@ -137,10 +140,10 @@ func createSpriteThumbnail(inFile, outFile string) {
 
 	len := int(f.Length())
 	interval := 0
-	if len < thumbnailer.NUM_THUMBNAILS {
+	if len < opts.Count {
 		interval = len
 	} else {
-		interval = len / thumbnailer.NUM_THUMBNAILS
+		interval = len / opts.Count
 	}
 
 	width := 180
