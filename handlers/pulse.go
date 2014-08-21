@@ -1,0 +1,40 @@
+package handlers
+
+import (
+	"github.com/dulo-tech/thumbnailer/thumbnailer"
+	"net/http"
+	"strconv"
+	
+	"github.com/dulo-tech/go-pulse/pulse"
+)
+
+// PulseHandler is an HTTP handler for the pulse protocol.
+type PulseHandler struct {
+	opts *thumbnailer.Options
+}
+
+// NewPulse creates and returns a new PulseHandler instance.
+func NewPulse(opts *thumbnailer.Options) *PulseHandler {
+	return &PulseHandler{
+		opts: opts,
+	}
+}
+
+// ServeHTTP implements http.Handler.ServeHTTP.
+func (h *PulseHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	p := pulse.New(r.RemoteAddr, thumbnailer.VERSION)
+	p.WhiteList = pulseIPWhiteList
+	p.RequestHeaders = make(pulse.Headers, len(r.Header))
+	for key, headers := range r.Header {
+		p.RequestHeaders[key] = headers[0]
+	}
+
+	numRequests++
+	p.Set("num-requests", strconv.Itoa(numRequests))
+	p.Set("num-errors", strconv.Itoa(numErrors))
+	for key, value := range p.ResponseHeaders() {
+		w.Header().Set(key, value)
+	}
+	w.WriteHeader(p.StatusCode())
+	w.Write([]byte(p.ResponseBody()))
+}
