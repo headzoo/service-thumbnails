@@ -21,7 +21,7 @@ import (
 const (
 	MAX_MEMORY           = 1 * 1024 * 1024
 	DEFAULT_MIME_TYPE    = "binary/octet-stream"
-	DEFAULT_WIDTH_SIMPLE    = 0
+	DEFAULT_WIDTH_SIMPLE = 0
 	DEFAULT_WIDTH_SPRITE = 180
 )
 
@@ -176,7 +176,7 @@ func handleSpriteThumbnail(w http.ResponseWriter, r *http.Request) {
 func handleHelp(w http.ResponseWriter, r *http.Request) {
 	data := HelpData{
 		DefaultCount: opts.Count,
-		DefaultSkip: opts.SkipSeconds,
+		DefaultSkip:  opts.SkipSeconds,
 	}
 	t, err := template.ParseFiles("./templates/help.html")
 	if err != nil {
