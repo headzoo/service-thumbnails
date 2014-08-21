@@ -1,6 +1,6 @@
 thumbnailer
 ===========
-Used to create thumbnails from videos. Both normal thumbnails, and spites. Two apps are provided: thumbnailer, which is a command line application, and thumbnailer-server, which is an HTTP server.
+Used to create thumbnails from videos. Both normal thumbnails, and sprites. Two apps are provided: thumbnailer, which is a command line application, and thumbnailer-server, which is an HTTP server that provides an API for creating thumbnails.
 
 
 ### Requirements
@@ -27,9 +27,9 @@ Generating thumbnails from several videos at once:
 
 ### Server Usage
 First start the server using:  
-`thumbnailer-server -h 127.0.0.1 -p 8888`.
+`thumbnailer-server -h 127.0.0.1 -p 8888`
 
 Then upload video files to the server. For example using curl:  
-`curl --form video=@video.mp4 -o thumb.jpg http://127.0.0.1:8888/thumbnail/big`.
+`curl --form video=@video.mp4 -o thumb.jpg http://127.0.0.1:8888/thumbnail/big`
 
 The server returns the thumbnail, which curl writes to thumb.jpg. The server also has a help page which can be viewed at `http://127.0.0.1:8888/help`, and it implements the [Pulse Protocol](https://github.com/dulo-tech/amsterdam/wiki/Specification:-Pulse-Protocol).
