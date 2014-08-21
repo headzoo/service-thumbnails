@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"github.com/dulo-tech/thumbnailer/ffmpeg"
 	"github.com/dulo-tech/thumbnailer/thumbnailer"
+	"github.com/dulo-tech/go-pulse/pulse"
 	"github.com/rakyll/magicmime"
 )
 
@@ -67,6 +68,7 @@ func main() {
 	http.HandleFunc("/thumbnail/big", handleBigThumbnail)
 	http.HandleFunc("/thumbnail/sprite", handleSpriteThumbnail)
 	http.HandleFunc("/help", handleHelp)
+	http.HandleFunc("/pulse", handlePulse)
 
 	conn := opts.Host + ":" + strconv.Itoa(opts.Port)
 	log.Println("Listening for requests on", conn)
@@ -161,6 +163,26 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	t.Execute(w, "T")
+}
+
+// handleHelp is the http callback to handle Pulse Protocol requests.
+func handlePulse(w http.ResponseWriter, r *http.Request) {
+	p := pulse.New(r.RemoteAddr, thumbnailer.VERSION)
+	p.WhiteList = []string{
+		"127.*",
+		"10.0.*",
+		"192.168.*",
+	}
+	p.RequestHeaders = make(pulse.Headers, len(r.Header))
+	for key, headers := range r.Header {
+		p.RequestHeaders[key] = headers[0]
+	}
+
+	for key, value := range p.ResponseHeaders() {
+		w.Header().Set(key, value)
+	}
+	w.WriteHeader(p.StatusCode())
+	w.Write([]byte(p.ResponseBody()))
 }
 
 // getFile returns the uploaded file.
