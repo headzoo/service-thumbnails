@@ -34,7 +34,7 @@ Example:
 Generating a sprite:  
 `thumbnailer -t sprite -i video.mp4 -o thumb.jpg`
 
-Generating a simple thumbnail:
+Generating a simple thumbnail:  
 `thumbnailer -t simple -i video.mp4 -o thumb.jpg`
 
 Generating thumbnails from several videos at once:  
