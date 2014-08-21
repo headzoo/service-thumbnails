@@ -3,15 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+
+	"github.com/dulo-tech/thumbnailer/thumbnailer"
 	"github.com/dulo-tech/thumbnailer/ffmpeg"
 	"os"
 	"strings"
-)
-
-// Misc constants.
-const (
-	VERSION        = "0.1"
-	NUM_THUMBNAILS = 30
 )
 
 // Default values for command line options.
@@ -141,10 +137,10 @@ func createSpriteThumbnail(inFile, outFile string) {
 
 	len := int(f.Length())
 	interval := 0
-	if len < NUM_THUMBNAILS {
+	if len < thumbnailer.NUM_THUMBNAILS {
 		interval = len
 	} else {
-		interval = len / NUM_THUMBNAILS
+		interval = len / thumbnailer.NUM_THUMBNAILS
 	}
 
 	width := 180
@@ -162,7 +158,7 @@ func createSpriteThumbnail(inFile, outFile string) {
 
 // printHelp() prints the command line help and exits.
 func printHelp() {
-	fmt.Printf("Thumbnailer v%s\n", VERSION)
+	fmt.Printf("Thumbnailer v%s\n", thumbnailer.VERSION)
 	fmt.Println("")
 	fmt.Println("USAGE:")
 	fmt.Println("thumbnailer -t <sprite|big> -i <video> -o <image>")
