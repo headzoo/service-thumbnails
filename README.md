@@ -14,7 +14,14 @@ Used to create thumbnails from videos. Both normal thumbnails, and spites. Two a
 
 
 ### Command Line Usage
+Generating a sprite:  
 `main -t sprite -i video.mp4 -o thumb.jpg`
+
+Generating a big thumbnail:  
+`main -t big -i video.mp4 -o thumb.jpg`
+
+Generating thumbnails from several videos at once:  
+`main -t big -i video1.mp4,video2.mp4,video3.mp4 -o thumb%02.jpg`
 
 
 ### Server Usage
