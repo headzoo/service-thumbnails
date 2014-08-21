@@ -22,7 +22,7 @@ func main() {
 	router.Handle("/help", handlers.NewHelp(opts)).Methods("GET")
 	router.Handle("/pulse", handlers.NewPulse(opts)).Methods("GET")
 
-	log.Printf("Listening for requests on %s:%d...", opts.Host, opts.Port)
+	thumbnailer.Verbose("Listening for requests on %s:%d...", opts.Host, opts.Port)
 	conn := opts.Host + ":" + strconv.Itoa(opts.Port)
 	err := http.ListenAndServe(conn, router)
 	if err != nil {
@@ -61,27 +61,30 @@ func parseFlags() *thumbnailer.Options {
 		"Number of thumbs to generate in a sprite. 30 is the default.")
 	flag.Parse()
 
+	thumbnailer.VerboseOutput = opts.Verbose
 	if opts.PrintHelp {
-		printHelp()
+		printHelp(opts)
 	}
 
 	return opts
 }
 
 // printHelp() prints the command line help and exits.
-func printHelp() {
-	fmt.Printf("Thumbnailer Server v%s\n", thumbnailer.VERSION)
-	fmt.Println("")
-	fmt.Println("USAGE:")
-	fmt.Println("thumbnailer-server -h <host> -p <port>")
-	fmt.Println("")
-	fmt.Println("OPTIONS:")
-	flag.VisitAll(func(f *flag.Flag) {
-		fmt.Printf("\t-%s\t%s\n", f.Name, f.Usage)
-	})
-	fmt.Println("")
-	fmt.Println("EXAMPLE:")
-	fmt.Println("server -h 127.0.0.1 -p 3366")
+func printHelp(opts *thumbnailer.Options) {
+	if thumbnailer.VerboseOutput || opts.PrintHelp {
+		fmt.Printf("Thumbnailer Server v%s\n", thumbnailer.VERSION)
+		fmt.Println("")
+		fmt.Println("USAGE:")
+		fmt.Println("thumbnailer-server -h <host> -p <port>")
+		fmt.Println("")
+		fmt.Println("OPTIONS:")
+		flag.VisitAll(func(f *flag.Flag) {
+			fmt.Printf("\t-%s\t%s\n", f.Name, f.Usage)
+		})
+		fmt.Println("")
+		fmt.Println("EXAMPLE:")
+		fmt.Println("server -h 127.0.0.1 -p 3366")
+	}
 
 	os.Exit(1)
 }

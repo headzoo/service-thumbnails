@@ -1,5 +1,10 @@
 package thumbnailer
 
+import (
+	"fmt"
+	"os"
+)
+
 const (
 	// The main application version.
 	VERSION = "0.1"
@@ -34,4 +39,21 @@ type Options struct {
 	Count       int
 	Verbose     bool
 	PrintHelp   bool
+}
+
+// Verbose stores whether to use verbose output or not.
+var VerboseOutput bool
+
+// verbose prints the given message when verbose output is turned on.
+func Verbose(msg string, a ...interface{}) {
+	if VerboseOutput {
+		fmt.Printf(msg+"\n", a...)
+	}
+}
+
+// verboseError prints the given message to stderr when verbose output is turned on.
+func VerboseError(msg string, a ...interface{}) {
+	if VerboseOutput {
+		fmt.Fprintf(os.Stderr, msg+"\n", a...)
+	}
 }

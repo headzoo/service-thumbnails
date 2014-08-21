@@ -85,7 +85,7 @@ func getFile(w http.ResponseWriter, r *http.Request) *Upload {
 		return nil
 	}
 
-	log.Printf("Got upload %#v\n", files[0])
+	thumbnailer.Verbose("Got upload %#v\n", files[0])
 	return &files[0]
 }
 

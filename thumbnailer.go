@@ -6,123 +6,26 @@ import (
 	"os"
 	"strings"
 
-	"github.com/dulo-tech/thumbnailer/ffmpeg"
+	"github.com/dulo-tech/thumbnailer/commands"
 	"github.com/dulo-tech/thumbnailer/thumbnailer"
 )
 
-// Signals a job is finished.
-type ChannelFinished chan bool
-
-// Signals an error.
-type ChannelError chan error
-
-var opts = thumbnailer.Options{}
-var chanFinished = make(ChannelFinished)
-var chanError = make(ChannelError)
-
 func main() {
-	parseFlags()
-	if opts.PrintHelp || opts.InFile == "" || opts.OutFile == "" || opts.ThumbType == "" {
-		printHelp()
-	}
-	if opts.ThumbType != "sprite" && opts.ThumbType != "simple" {
-		printHelp()
-	}
+	opts := parseFlags()
 
-	inFiles := strings.Split(opts.InFile, ",")
-	for i, f := range inFiles {
-		inFiles[i] = strings.Trim(f, " ")
-	}
-	for _, file := range inFiles {
-		if !fileExists(file) {
-			verboseError(fmt.Sprintf("The input file %q does not exist.", file))
-			os.Exit(1)
-		}
-	}
-
-	verbose(fmt.Sprintf("Thumbnailing %d video(s).", len(inFiles)))
-	for i, file := range inFiles {
-		out := opts.OutFile
-		if strings.Contains(out, "%") {
-			out = fmt.Sprintf(out, i)
-		}
-		if opts.ThumbType == "sprite" {
-			go createSpriteThumbnail(file, out)
-		} else {
-			go createSimpleThumbnail(file, out)
-		}
-	}
-
-	finished := 0
-	numJobs := len(inFiles)
-	for {
-		select {
-		case err := <-chanError:
-			{
-				verbose(err.Error())
-				os.Exit(1)
-			}
-		case <-chanFinished:
-			{
-				finished++
-				if finished == numJobs {
-					verbose("Finished")
-					os.Exit(0)
-				}
-			}
-		}
-	}
-}
-
-// createSimpleThumbnail creates a simple thumbnail.
-func createSimpleThumbnail(inFile, outFile string) {
-	defer func() {
-		chanFinished <- true
-	}()
-
-	f := ffmpeg.New(inFile)
-	f.SkipSeconds = opts.SkipSeconds
-
-	err := f.CreateThumbnail(opts.Width, outFile)
+	router := commands.NewRouter(splitFiles(opts.InFile), opts.OutFile)
+	router.Command("simple", commands.NewSimple(opts))
+	router.Command("sprite", commands.NewSprite(opts))
+	err := router.Route(opts.ThumbType)
 	if err != nil {
-		chanError <- err
-		return
+		panic(err)
 	}
-	verbose(fmt.Sprintf("Thumbnail written to file %q.", outFile))
-}
-
-// createSpriteThumbnail creates a sprite thumbnail.
-func createSpriteThumbnail(inFile, outFile string) {
-	defer func() {
-		chanFinished <- true
-	}()
-
-	f := ffmpeg.New(inFile)
-	f.SkipSeconds = opts.SkipSeconds
-
-	len := int(f.Length())
-	interval := 0
-	if len < opts.Count {
-		interval = len
-	} else {
-		interval = len / opts.Count
-	}
-
-	width := 180
-	if opts.Width != 0 {
-		width = opts.Width
-	}
-
-	err := f.CreateThumbnailSprite(interval, width, outFile)
-	if err != nil {
-		chanError <- err
-		return
-	}
-	verbose(fmt.Sprintf("Thumbnail written to file %q.", outFile))
 }
 
 // parseFlags parses the command line option flags.
-func parseFlags() {
+func parseFlags() *thumbnailer.Options {
+	var opts = &thumbnailer.Options{}
+
 	flag.BoolVar(
 		&opts.PrintHelp,
 		"help",
@@ -163,39 +66,69 @@ func parseFlags() {
 		thumbnailer.OPT_COUNT,
 		"Number of thumbs to generate in a sprite. 30 is the default.")
 	flag.Parse()
+
+	thumbnailer.VerboseOutput = opts.Verbose
+	if opts.PrintHelp {
+		printHelp(opts)
+	}
+	if opts.InFile == "" || opts.OutFile == "" || opts.ThumbType == "" {
+		printHelp(opts)
+	}
+	if opts.ThumbType != "sprite" && opts.ThumbType != "simple" {
+		printHelp(opts)
+	}
+
+	return opts
 }
 
 // printHelp() prints the command line help and exits.
-func printHelp() {
-	fmt.Printf("Thumbnailer v%s\n", thumbnailer.VERSION)
-	fmt.Println("")
-	fmt.Println("USAGE:")
-	fmt.Println("thumbnailer -t <sprite|simple> -i <video> -o <image>")
-	fmt.Println("")
-	fmt.Println("OPTIONS:")
-	flag.VisitAll(func(f *flag.Flag) {
-		fmt.Printf("\t-%s\t%s\n", f.Name, f.Usage)
-	})
-	fmt.Println("")
-	fmt.Println("EXAMPLE:")
-	fmt.Println("thumbnailer -v -t sprite -i source.mp4 -o thumb.jpg")
-	fmt.Println("thumbnailer -v -i source1.mp4,source2.mp4 -o out%02d.jpg")
+func printHelp(opts *thumbnailer.Options) {
+	if thumbnailer.VerboseOutput || opts.PrintHelp {
+		fmt.Printf("Thumbnailer v%s\n", thumbnailer.VERSION)
+		fmt.Println("")
+		fmt.Println("USAGE:")
+		fmt.Println("thumbnailer -t <sprite|simple> -i <video> -o <image>")
+		fmt.Println("")
+		fmt.Println("<sprite|simple> determines the type of thumbnail being generated. Either")
+		fmt.Println("a sprite or a simple thumbnail. Simple is the default when not specified.")
+		fmt.Println("")
+		fmt.Println("<video> is one or more source videos. Separate multiple videos with commas.")
+		fmt.Println("")
+		fmt.Println("<image> may contain the place holders {name} and {type} which correspond")
+		fmt.Println("to the name of the source video (without file extension) and the type of")
+		fmt.Println("of thumbnail. One of 'sprite' or 'simple'. The <image> may also contain")
+		fmt.Println("the verb %d which will be replaced with the file number. See the fmt package")
+		fmt.Println("for more information on verbs.")
+		fmt.Println("")
+		fmt.Println("OPTIONS:")
+		flag.VisitAll(func(f *flag.Flag) {
+			fmt.Printf("\t-%-8s%s\n", f.Name, f.Usage)
+		})
+		fmt.Println("")
+		fmt.Println("EXAMPLES:")
+		fmt.Println("thumbnailer -t sprite -i source.mp4 -o thumb.jpg")
+		fmt.Println("thumbnailer -i source1.mp4,source2.mp4 -o out%02d.jpg")
+		fmt.Println("thumbnailer -t sprite -i source.mp4 -o thumb{name}{type}.jpg")
+	}
 
 	os.Exit(1)
 }
 
-// verbose prints the given message when verbose output is turned on.
-func verbose(msg string) {
-	if opts.Verbose {
-		fmt.Println(msg)
+// splitFiles converts a comma separated list of files into an array of file names.
+func splitFiles(inFiles string) []string {
+	files := strings.Split(inFiles, ",")
+	for i, f := range files {
+		files[i] = strings.Trim(f, " ")
 	}
-}
 
-// verbose prints the given message when verbose output is turned on.
-func verboseError(msg string) {
-	if opts.Verbose {
-		fmt.Fprintln(os.Stderr, msg)
+	for _, file := range files {
+		if !fileExists(file) {
+			thumbnailer.VerboseError("The input file %q does not exist.", file)
+			os.Exit(1)
+		}
 	}
+
+	return files
 }
 
 // fileExists returns whether the given file exists.
