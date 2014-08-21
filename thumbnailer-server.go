@@ -279,7 +279,7 @@ func printHelp() {
 	fmt.Printf("Thumbnailer Server v%s\n", thumbnailer.VERSION)
 	fmt.Println("")
 	fmt.Println("USAGE:")
-	fmt.Println("server -h <host> -p <port>")
+	fmt.Println("thumbnailer-server -h <host> -p <port>")
 	fmt.Println("")
 	fmt.Println("OPTIONS:")
 	flag.VisitAll(func(f *flag.Flag) {
