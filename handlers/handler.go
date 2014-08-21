@@ -3,7 +3,6 @@ package handlers
 import (
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"strconv"

@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -39,6 +38,11 @@ func parseFlags() *thumbnailer.Options {
 		"help",
 		thumbnailer.OPT_PRINT_HELP,
 		"Display command help.")
+	flag.BoolVar(
+		&opts.Verbose,
+		"v",
+		thumbnailer.OPT_VERBOSE,
+		"Verbose output.")
 	flag.StringVar(
 		&opts.Host,
 		"h",
