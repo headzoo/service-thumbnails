@@ -1,13 +1,16 @@
 package main
 
 import (
+	"html/template"
 	"io"
 	"io/ioutil"
-	"net/http"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 
+	"flag"
+	"fmt"
 	"github.com/dulo-tech/thumbnailer/ffmpeg"
 	"github.com/dulo-tech/thumbnailer/thumbnailer"
 	"github.com/rakyll/magicmime"
@@ -21,6 +24,16 @@ const (
 	DEFAULT_WIDTH_SPRITE = 180
 )
 
+// Default values for command line options.
+const (
+	OPT_HOST         = "127.0.0.1"
+	OPT_PORT         = 8080
+	OPT_TEMP_DIR     = "/tmp"
+	OPT_SKIP_SECONDS = 0
+	OPT_VERBOSE      = false
+	OPT_PRINT_HELP   = false
+)
+
 // Upload stores the values of an uploaded file.
 type Upload struct {
 	Name     string
@@ -29,27 +42,64 @@ type Upload struct {
 	Temp     string
 }
 
-func main() {
-	http.HandleFunc("/thumbnailer/big", createBigThumbnail)
-	http.HandleFunc("/thumbnailer/sprite", createSpriteThumbnail)
-	http.ListenAndServe(":3000", nil)
+// Options stores the command line options.
+type Options struct {
+	Host          string
+	Port          int
+	TempDirectory string
+	SkipSeconds   int
+	PrintHelp     bool
 }
 
-// createBigThumbnail is the http callback to create a big thumbnail.
-func createBigThumbnail(w http.ResponseWriter, r *http.Request) {
+var opts = Options{}
+
+func main() {
+	flag.BoolVar(&opts.PrintHelp, "help", OPT_PRINT_HELP, "Display command help.")
+	flag.StringVar(&opts.Host, "h", OPT_HOST, "The host name to listen on.")
+	flag.IntVar(&opts.Port, "p", OPT_PORT, "The port to listen on.")
+	flag.IntVar(&opts.SkipSeconds, "s", OPT_SKIP_SECONDS, "Skip this number of seconds into the video before thumbnailing.")
+	flag.StringVar(&opts.TempDirectory, "d", OPT_TEMP_DIR, "Temp directory.")
+	flag.Parse()
+	if opts.PrintHelp {
+		printHelp()
+	}
+
+	http.HandleFunc("/thumbnail/big", handleBigThumbnail)
+	http.HandleFunc("/thumbnail/sprite", handleSpriteThumbnail)
+	http.HandleFunc("/help", handleHelp)
+
+	conn := opts.Host + ":" + strconv.Itoa(opts.Port)
+	log.Println("Listening for requests on", conn)
+	err := http.ListenAndServe(conn, nil)
+	if err != nil {
+		panic(err)
+	}
+}
+
+// handleBigThumbnail is the http callback to create a big thumbnail.
+func handleBigThumbnail(w http.ResponseWriter, r *http.Request) {
 	file := getFile(w, r)
 	if file == nil {
 		return
 	}
 
-	temp := getTempFile()
 	width := DEFAULT_WIDTH_BIG
+	skip := opts.SkipSeconds
+
 	query := r.URL.Query()
 	if w, ok := query["width"]; ok {
 		width = atoi(w[0])
 	}
+	if s, ok := query["skip"]; ok {
+		skip = atoi(s[0])
+	}
 
-	err := ffmpeg.NewFFmpeg(file.Temp).CreateThumbnail(width, temp)
+	temp := getTempFile()
+	ff := ffmpeg.NewFFmpeg(file.Temp)
+	ff.TmpDirectory = opts.TempDirectory
+	ff.SkipSeconds = skip
+
+	err := ff.CreateThumbnail(width, temp)
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte(err.Error()))
@@ -61,21 +111,29 @@ func createBigThumbnail(w http.ResponseWriter, r *http.Request) {
 	writeFileToResponse(temp, w)
 }
 
-// createSpriteThumbnail is the http callback to create a sprite thumbnail.
-func createSpriteThumbnail(w http.ResponseWriter, r *http.Request) {
+// handleSpriteThumbnail is the http callback to create a sprite thumbnail.
+func handleSpriteThumbnail(w http.ResponseWriter, r *http.Request) {
 	file := getFile(w, r)
 	if file == nil {
 		return
 	}
 
-	temp := getTempFile()
 	width := DEFAULT_WIDTH_SPRITE
+	skip := opts.SkipSeconds
+
 	query := r.URL.Query()
 	if w, ok := query["width"]; ok {
 		width = atoi(w[0])
 	}
+	if s, ok := query["skip"]; ok {
+		skip = atoi(s[0])
+	}
 
+	temp := getTempFile()
 	ff := ffmpeg.NewFFmpeg(file.Temp)
+	ff.TmpDirectory = opts.TempDirectory
+	ff.SkipSeconds = skip
+
 	interval := int(ff.Length())
 	if interval > thumbnailer.NUM_THUMBNAILS {
 		interval = interval / thumbnailer.NUM_THUMBNAILS
@@ -91,6 +149,18 @@ func createSpriteThumbnail(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Disposition", "attachment; filename=thumbnail.jpg")
 	w.Header().Set("Content-Type", "image/jpeg")
 	writeFileToResponse(temp, w)
+}
+
+// handleHelp is the http callback to display the help page.
+func handleHelp(w http.ResponseWriter, r *http.Request) {
+	t, err := template.ParseFiles("./templates/help.html")
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	t.Execute(w, "T")
 }
 
 // getFile returns the uploaded file.
@@ -180,6 +250,24 @@ func getTempFile() string {
 	temp, _ := ioutil.TempFile("/tmp", "thumb")
 	temp.Close()
 	return temp.Name()
+}
+
+// printHelp() prints the command line help and exits.
+func printHelp() {
+	fmt.Printf("Thumbnailer Server v%s\n", thumbnailer.VERSION)
+	fmt.Println("")
+	fmt.Println("USAGE:")
+	fmt.Println("server -h <host> -p <port>")
+	fmt.Println("")
+	fmt.Println("OPTIONS:")
+	flag.VisitAll(func(f *flag.Flag) {
+		fmt.Printf("\t-%s\t%s\n", f.Name, f.Usage)
+	})
+	fmt.Println("")
+	fmt.Println("EXAMPLE:")
+	fmt.Println("server -h 127.0.0.1 -p 3366")
+
+	os.Exit(1)
 }
 
 // atoi converts a string to an integer.
