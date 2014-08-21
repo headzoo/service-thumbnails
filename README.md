@@ -1,6 +1,6 @@
 thumbnailer
 ===========
-Used to create thumbnails from videos. Both normal thumbnails, and sprites. Two apps are provided: thumbnailer, which is a command line application, and thumbnailer-server, which is an HTTP server.
+Used to create thumbnails from videos. Both normal thumbnails, and sprites. Two apps are provided: thumbnailer, which is a command line application, and thumbnailer-server, which is an HTTP server that provides an API for creating thumbnails.
 
 
 ### Requirements
