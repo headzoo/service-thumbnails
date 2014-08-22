@@ -54,5 +54,11 @@ Then upload video files to the server. For example using curl:
 The server returns the thumbnail, which curl writes to thumb.jpg. The server also has a help page which can be viewed at `http://127.0.0.1:8888/help`, and it implements the [Pulse Protocol](https://github.com/dulo-tech/amsterdam/wiki/Specification:-Pulse-Protocol).
 
 
+### Configuration File
+The command line options can also be specified in a configuration file. Pass the path to the file using the -conf switch. When the -conf switch isn't used the app will try to read from `$HOME/.service-thumbnails.conf`. Finally the app will try to read from `/etc/service-thumbnails.conf`.
+
+See the [example configuration file](https://github.com/dulo-tech/service-thumbnails/blob/master/thumbnails.conf) for format and possible values.
+
+
 ### TODO
 * The server needs to validate upload mime types.
