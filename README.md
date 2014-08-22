@@ -1,6 +1,6 @@
 service-thumbnails
 ==================
-Used to create thumbnails from videos. Both normal thumbnails, and sprites. The app can run in one of two modes: cli and http server. Service Thumbnails is used to generate thumbnails from the command line when in cli mode, which is the default. In http mode service-thumbnails runs as an HTTP server capable of handling requests to generate thumbnails.
+Used to create thumbnails from videos. Both normal thumbnails, and sprites. The app can run in one of two modes: cli and http server.
 
 
 ### Requirements
