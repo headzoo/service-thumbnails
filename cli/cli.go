@@ -4,8 +4,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/dulo-tech/thumbnailer/cli/commands"
-	"github.com/dulo-tech/thumbnailer/core"
+	"github.com/dulo-tech/service-thumbnails/cli/commands"
+	"github.com/dulo-tech/service-thumbnails/core"
 )
 
 func Go() {

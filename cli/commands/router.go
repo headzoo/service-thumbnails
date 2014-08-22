@@ -3,7 +3,7 @@ package commands
 import (
 	"errors"
 	"fmt"
-	"github.com/dulo-tech/thumbnailer/core"
+	"github.com/dulo-tech/service-thumbnails/core"
 	"path/filepath"
 	"strings"
 )

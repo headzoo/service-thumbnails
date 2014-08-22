@@ -7,9 +7,9 @@ import (
 	"os"
 	"text/template"
 
-	"github.com/dulo-tech/thumbnailer/cli"
-	"github.com/dulo-tech/thumbnailer/core"
-	"github.com/dulo-tech/thumbnailer/http"
+	"github.com/dulo-tech/service-thumbnails/cli"
+	"github.com/dulo-tech/service-thumbnails/core"
+	"github.com/dulo-tech/service-thumbnails/http"
 )
 
 func main() {

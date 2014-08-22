@@ -7,7 +7,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/dulo-tech/thumbnailer/core"
+	"github.com/dulo-tech/service-thumbnails/core"
 	"github.com/rakyll/magicmime"
 )
 

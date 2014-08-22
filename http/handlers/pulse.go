@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"github.com/dulo-tech/thumbnailer/core"
 	"net/http"
 	"strconv"
 
+	"github.com/dulo-tech/service-thumbnails/core"
 	"github.com/dulo-tech/go-pulse/pulse"
 )
 

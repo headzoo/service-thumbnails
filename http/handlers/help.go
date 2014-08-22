@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/dulo-tech/thumbnailer/core"
+	"github.com/dulo-tech/service-thumbnails/core"
 	"html/template"
 	"net/http"
 )
