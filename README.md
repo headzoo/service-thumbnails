@@ -49,3 +49,7 @@ Then upload video files to the server. For example using curl:
 `curl --form video=@video.mp4 -o thumb.jpg http://127.0.0.1:8888/thumbnail/simple`
 
 The server returns the thumbnail, which curl writes to thumb.jpg. The server also has a help page which can be viewed at `http://127.0.0.1:8888/help`, and it implements the [Pulse Protocol](https://github.com/dulo-tech/amsterdam/wiki/Specification:-Pulse-Protocol).
+
+
+### TODO
+* The server needs to validate upload mime types.
