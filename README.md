@@ -1,6 +1,6 @@
 service-thumbnails
 ==================
-Used to create thumbnails from videos. Both normal thumbnails, and sprites. The app can run in one of two modes: cli and http server. Thumbnailer is used to generate thumbnails from the command line when in cli mode, which is the default. In http mode thumbnailer runs as an HTTP server capable of handling requests to generate thumbnails.
+Used to create thumbnails from videos. Both normal thumbnails, and sprites. The app can run in one of two modes: cli and http server. Service Thumbnails is used to generate thumbnails from the command line when in cli mode, which is the default. In http mode service-thumbnails runs as an HTTP server capable of handling requests to generate thumbnails.
 
 
 ### Requirements
@@ -10,8 +10,9 @@ Used to create thumbnails from videos. Both normal thumbnails, and sprites. The 
 
 
 ### Installation
-First make sure the requirements are installed, and then install the thumbnailer using:  
-`go install github.com/dulo-tech/thumbnailer`
+First make sure the requirements are installed, and then install the service-thumbnails using:  
+`go install github.com/dulo-tech/service-thumbnails`
+
 
 ### Thumbnail Types
 Thumbnailer currently creates two kinds of thumbnails: simple and sprite.
