@@ -34,14 +34,14 @@ Example:
 
 
 ### CLI Usage
+Generating a simple thumbnail:  
+`service-thumbnails -i video.mp4 -o thumb.jpg`
+
 Generating a sprite:  
 `service-thumbnails -t sprite -i video.mp4 -o thumb.jpg`
 
-Generating a simple thumbnail:  
-`service-thumbnails -t simple -i video.mp4 -o thumb.jpg`
-
 Generating thumbnails from several videos at once:  
-`service-thumbnails -t simple -i video1.mp4,video2.mp4,video3.mp4 -o thumb%02.jpg`
+`service-thumbnails -i video1.mp4,video2.mp4,video3.mp4 -o thumb%02.jpg`
 
 
 ### HTTP Usage
