@@ -13,6 +13,8 @@ Used to create thumbnails from videos. Both normal thumbnails, and sprites. The 
 First make sure the requirements are installed, and then install the service-thumbnails using:  
 `go install github.com/dulo-tech/service-thumbnails`
 
+Linux binaries may be downloaded from the [releases page](https://github.com/dulo-tech/service-thumbnails/releases).
+
 
 ### Thumbnail Types
 Thumbnailer currently creates two kinds of thumbnails: simple and sprite.
