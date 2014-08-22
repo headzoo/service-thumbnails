@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/dulo-tech/thumbnailer/thumbnailer"
-	"strings"
 	"path/filepath"
+	"strings"
 )
 
 // Commanders is a map of Commander instances.
@@ -80,6 +80,6 @@ func expandFileName(format, name, typ string, index int) string {
 	}
 	format = strings.Replace(format, "{name}", name, -1)
 	format = strings.Replace(format, "{type}", typ, -1)
-	
+
 	return format
 }
