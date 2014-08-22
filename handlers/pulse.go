@@ -14,10 +14,8 @@ type PulseHandler struct {
 }
 
 // NewPulse creates and returns a new PulseHandler instance.
-func NewPulse(opts *core.Options) *PulseHandler {
-	return &PulseHandler{
-		Handler: *New(opts),
-	}
+func NewPulse() *PulseHandler {
+	return &PulseHandler{}
 }
 
 // ServeHTTP implements http.Handler.ServeHTTP.

@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"github.com/dulo-tech/thumbnailer/core"
 	"github.com/dulo-tech/thumbnailer/ffmpeg"
 	"net/http"
+	"github.com/dulo-tech/thumbnailer/core"
 )
 
 // SpriteHandler is an HTTP handler for creating sprite thumbnails.
@@ -12,10 +12,8 @@ type SpriteHandler struct {
 }
 
 // NewSprite creates and returns a new SpriteHandler instance.
-func NewSprite(opts *core.Options) *SpriteHandler {
-	return &SpriteHandler{
-		Handler: *New(opts),
-	}
+func NewSprite() *SpriteHandler {
+	return &SpriteHandler{}
 }
 
 // ServeHTTP implements http.Handler.ServeHTTP.
@@ -26,8 +24,8 @@ func (h *SpriteHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	width := DEFAULT_WIDTH_SPRITE
-	skip := h.opts.SkipSeconds
-	count := h.opts.Count
+	skip := core.Opts.SkipSeconds
+	count := core.Opts.Count
 
 	query := r.URL.Query()
 	if w, ok := query["width"]; ok {

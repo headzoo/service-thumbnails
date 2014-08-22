@@ -11,9 +11,9 @@ type SimpleCommand struct {
 }
 
 // NewSimple creates and returns a new SimpleCommand instance.
-func NewSimple(opts *core.Options) *SimpleCommand {
+func NewSimple() *SimpleCommand {
 	return &SimpleCommand{
-		Command: *newCommand(opts),
+		Command: *newCommand(),
 	}
 }
 
@@ -24,9 +24,9 @@ func (c *SimpleCommand) Execute(inFile, outFile string) {
 	}()
 
 	f := ffmpeg.New(inFile)
-	f.SkipSeconds = c.opts.SkipSeconds
+	f.SkipSeconds = core.Opts.SkipSeconds
 
-	err := f.CreateThumbnail(c.opts.Width, outFile)
+	err := f.CreateThumbnail(core.Opts.Width, outFile)
 	if err != nil {
 		(*c.chanError) <- err
 		return

@@ -44,51 +44,54 @@ type Options struct {
 }
 
 // opts stores the command line options.
-var opts = &Options{}
+var Opts = &Options{}
 
-// verbose prints the given message when verbose output is turned on.
+// Init initializes global application variables.
+func Init() {
+	FlagOptions()
+}
+
+// VPrintf prints the given message when verbose output is turned on.
 func VPrintf(msg string, a ...interface{}) {
-	if opts.Verbose {
+	if Opts.Verbose {
 		fmt.Printf(msg+"\n", a...)
 	}
 }
 
-// verboseError prints the given message to stderr when verbose output is turned on.
+// VPrintfError prints the given message to stderr when verbose output is turned on.
 func VPrintfError(msg string, a ...interface{}) {
-	if opts.Verbose {
+	if Opts.Verbose {
 		fmt.Fprintf(os.Stderr, msg+"\n", a...)
 	}
 }
 
 // FlagOptions initializes the command flags for both the cli app and server.
-func FlagOptions() *Options {
+func FlagOptions() {
 	flag.BoolVar(
-		&opts.PrintHelp,
+		&Opts.PrintHelp,
 		"help",
 		OptDefaultPrintHelp,
 		"Display command help.")
 	flag.BoolVar(
-		&opts.Verbose,
+		&Opts.Verbose,
 		"v",
 		OptDefaultVerbose,
 		"Verbose output.")
 	flag.IntVar(
-		&opts.SkipSeconds,
+		&Opts.SkipSeconds,
 		"s",
 		OptDefaultSkipSeconds,
 		"Skip this number of seconds into the video before thumbnailing.")
 	flag.IntVar(
-		&opts.Count,
+		&Opts.Count,
 		"c",
 		OptDefaultCount,
 		"Number of thumbs to generate in a sprite. 30 is the default.")
 	flag.IntVar(
-		&opts.Width,
+		&Opts.Width,
 		"w",
 		OptDefaultWidth,
 		"The thumbnail width. Overrides the built in defaults.")
-
-	return opts
 }
 
 // ExecuteHelpTemplate() prints the command line help using the given template and exits.

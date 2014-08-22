@@ -11,41 +11,39 @@ import (
 )
 
 func main() {
-	opts := parseFlags()
-
+	Init()
 	router := mux.NewRouter()
-	router.Handle("/thumbnail/simple", handlers.NewSimple(opts)).Methods("POST")
-	router.Handle("/thumbnail/sprite", handlers.NewSprite(opts)).Methods("POST")
-	router.Handle("/help", handlers.NewHelp(opts)).Methods("GET")
-	router.Handle("/pulse", handlers.NewPulse(opts)).Methods("GET")
+	router.Handle("/thumbnail/simple", handlers.NewSimple()).Methods("POST")
+	router.Handle("/thumbnail/sprite", handlers.NewSprite()).Methods("POST")
+	router.Handle("/help", handlers.NewHelp()).Methods("GET")
+	router.Handle("/pulse", handlers.NewPulse()).Methods("GET")
 
-	core.VPrintf("Listening for requests on %s:%d...", opts.Host, opts.Port)
-	conn := opts.Host + ":" + strconv.Itoa(opts.Port)
+	core.VPrintf("Listening for requests on %s:%d...", core.Opts.Host, core.Opts.Port)
+	conn := core.Opts.Host + ":" + strconv.Itoa(core.Opts.Port)
 	err := http.ListenAndServe(conn, router)
 	if err != nil {
 		panic(err)
 	}
 }
 
-// parseFlags parses the command line option flags.
-func parseFlags() *core.Options {
-	opts := core.FlagOptions()
+// Init parses the command line option flags.
+func Init() {
+	core.Init()
 	flag.StringVar(
-		&opts.Host,
+		&core.Opts.Host,
 		"h",
 		core.OptDefaultHost,
 		"The host name to listen on.")
 	flag.IntVar(
-		&opts.Port,
+		&core.Opts.Port,
 		"p",
 		core.OptDefaultPort,
 		"The port to listen on.")
 	flag.Parse()
 
-	if opts.PrintHelp {
-		core.ExecuteHelpTemplate(opts, serverHelpTemplate)
+	if core.Opts.PrintHelp {
+		core.ExecuteHelpTemplate(core.Opts, serverHelpTemplate)
 	}
-	return opts
 }
 
 const serverHelpTemplate = `Thumbnailer HTTP Server v{{.Version}} - Video thumbnail generating HTTP server.

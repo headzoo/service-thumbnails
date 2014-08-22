@@ -10,47 +10,45 @@ import (
 )
 
 func main() {
-	opts := parseFlags()
-
-	router := commands.NewRouter(splitFiles(opts.InFile), opts.OutFile)
-	router.Command("simple", commands.NewSimple(opts))
-	router.Command("sprite", commands.NewSprite(opts))
-	err := router.Route(opts.ThumbType)
+	Init()
+	router := commands.NewRouter(splitFiles(core.Opts.InFile), core.Opts.OutFile)
+	router.Command("simple", commands.NewSimple())
+	router.Command("sprite", commands.NewSprite())
+	err := router.Route(core.Opts.ThumbType)
 	if err != nil {
 		panic(err)
 	}
 }
 
-// parseFlags parses the command line option flags.
-func parseFlags() *core.Options {
-	opts := core.FlagOptions()
+// Init parses the command line option flags.
+func Init() {
+	core.Init()
 	flag.StringVar(
-		&opts.ThumbType,
+		&core.Opts.ThumbType,
 		"t",
 		core.OptDefaultThumbType,
 		"The type of thumbnail to generate. 'simple' is the default.")
 	flag.StringVar(
-		&opts.InFile,
+		&core.Opts.InFile,
 		"i",
 		core.OptDefaultInFile,
 		"The input video file. Separate multiple files with a comma.")
 	flag.StringVar(
-		&opts.OutFile,
+		&core.Opts.OutFile,
 		"o",
 		core.OptDefaultOutFile,
 		"The output image file.")
 	flag.Parse()
-
-	if opts.PrintHelp {
-		core.ExecuteHelpTemplate(opts, thumbnailerHelpTemplate)
+	
+	if core.Opts.PrintHelp {
+		core.ExecuteHelpTemplate(core.Opts, thumbnailerHelpTemplate)
 	}
-	if opts.InFile == "" || opts.OutFile == "" || opts.ThumbType == "" {
-		core.ExecuteHelpTemplate(opts, thumbnailerHelpTemplate)
+	if core.Opts.InFile == "" || core.Opts.OutFile == "" || core.Opts.ThumbType == "" {
+		core.ExecuteHelpTemplate(core.Opts, thumbnailerHelpTemplate)
 	}
-	if opts.ThumbType != "sprite" && opts.ThumbType != "simple" {
-		core.ExecuteHelpTemplate(opts, thumbnailerHelpTemplate)
+	if core.Opts.ThumbType != "sprite" && core.Opts.ThumbType != "simple" {
+		core.ExecuteHelpTemplate(core.Opts, thumbnailerHelpTemplate)
 	}
-	return opts
 }
 
 // splitFiles converts a comma separated list of files into an array of file names.

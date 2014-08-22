@@ -58,15 +58,6 @@ type Upload struct {
 
 // Handler is the default HTTP handler.
 type Handler struct {
-	// opts is the command line options.
-	opts *core.Options
-}
-
-// New creates and returns a new Handler instance.
-func New(opts *core.Options) *Handler {
-	return &Handler{
-		opts: opts,
-	}
 }
 
 // getFile returns the uploaded file.

@@ -1,9 +1,5 @@
 package commands
 
-import (
-	"github.com/dulo-tech/thumbnailer/core"
-)
-
 type ChannelFinished chan bool
 type ChannelError chan error
 
@@ -15,16 +11,13 @@ type Commander interface {
 
 // Command is used to create thumbs from the command line.
 type Command struct {
-	opts         *core.Options
 	chanFinished *ChannelFinished
 	chanError    *ChannelError
 }
 
 // New creates and returns a new Command instance.
-func newCommand(opts *core.Options) *Command {
-	return &Command{
-		opts: opts,
-	}
+func newCommand() *Command {
+	return &Command{}
 }
 
 // SetChannels is used to set the channels used to coordinate command executors.

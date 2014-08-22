@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"github.com/dulo-tech/thumbnailer/core"
 	"github.com/dulo-tech/thumbnailer/ffmpeg"
 	"net/http"
+	"github.com/dulo-tech/thumbnailer/core"
 )
 
 // SimpleHandler is an HTTP handler for creating simple thumbnails.
@@ -12,10 +12,8 @@ type SimpleHandler struct {
 }
 
 // NewPulse creates and returns a new SimpleHandler instance.
-func NewSimple(opts *core.Options) *SimpleHandler {
-	return &SimpleHandler{
-		Handler: *New(opts),
-	}
+func NewSimple() *SimpleHandler {
+	return &SimpleHandler{}
 }
 
 // ServeHTTP implements http.Handler.ServeHTTP.
@@ -26,7 +24,7 @@ func (h *SimpleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	width := DEFAULT_WIDTH_SIMPLE
-	skip := h.opts.SkipSeconds
+	skip := core.Opts.SkipSeconds
 
 	query := r.URL.Query()
 	if w, ok := query["width"]; ok {

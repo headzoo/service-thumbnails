@@ -11,9 +11,9 @@ type SpriteCommand struct {
 }
 
 // NewSprite creates and returns a new SpriteCommand instance.
-func NewSprite(opts *core.Options) *SpriteCommand {
+func NewSprite() *SpriteCommand {
 	return &SpriteCommand{
-		Command: *newCommand(opts),
+		Command: *newCommand(),
 	}
 }
 
@@ -24,19 +24,19 @@ func (c *SpriteCommand) Execute(inFile, outFile string) {
 	}()
 
 	f := ffmpeg.New(inFile)
-	f.SkipSeconds = c.opts.SkipSeconds
+	f.SkipSeconds = core.Opts.SkipSeconds
 
 	len := int(f.Length())
 	interval := 0
-	if len < c.opts.Count {
+	if len < core.Opts.Count {
 		interval = len
 	} else {
-		interval = len / c.opts.Count
+		interval = len / core.Opts.Count
 	}
 
 	width := 180
-	if c.opts.Width != 0 {
-		width = c.opts.Width
+	if core.Opts.Width != 0 {
+		width = core.Opts.Width
 	}
 
 	err := f.CreateThumbnailSprite(interval, width, outFile)

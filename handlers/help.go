@@ -3,7 +3,6 @@ package handlers
 import (
 	"html/template"
 	"net/http"
-
 	"github.com/dulo-tech/thumbnailer/core"
 )
 
@@ -19,17 +18,15 @@ type HelpHandler struct {
 }
 
 // NewHelp creates and returns a new HelpHandler instance.
-func NewHelp(opts *core.Options) *HelpHandler {
-	return &HelpHandler{
-		Handler: *New(opts),
-	}
+func NewHelp() *HelpHandler {
+	return &HelpHandler{}
 }
 
 // ServeHTTP implements http.Handler.ServeHTTP.
 func (h *HelpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	data := HelpData{
-		DefaultCount: h.opts.Count,
-		DefaultSkip:  h.opts.SkipSeconds,
+		DefaultCount: core.Opts.Count,
+		DefaultSkip:  core.Opts.SkipSeconds,
 	}
 
 	t, err := template.New("help").Parse(helpTemplate)
