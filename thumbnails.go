@@ -7,15 +7,15 @@ import (
 	"fmt"
 	"os"
 	"os/user"
+	"path"
 	"reflect"
+	"strconv"
 	"strings"
 	"text/template"
 
 	"github.com/dulo-tech/service-thumbnails/cli"
 	"github.com/dulo-tech/service-thumbnails/core"
 	"github.com/dulo-tech/service-thumbnails/http"
-	"path"
-	"strconv"
 )
 
 func main() {
