@@ -3,6 +3,9 @@ package thumbnailer
 import (
 	"fmt"
 	"os"
+	"bytes"
+	"flag"
+	"text/template"
 )
 
 const (
@@ -56,4 +59,27 @@ func VerboseError(msg string, a ...interface{}) {
 	if VerboseOutput {
 		fmt.Fprintf(os.Stderr, msg+"\n", a...)
 	}
+}
+
+// PrintHelp() prints the command line help using the given template and exits.
+func PrintHelp(opts *Options, t string) {
+	if opts.Verbose || opts.PrintHelp {
+		buff := bytes.Buffer{}
+		flag.VisitAll(func(f *flag.Flag) {
+			buff.WriteString(fmt.Sprintf("\t-%-8s%s\n", f.Name, f.Usage))
+		})
+	
+		data := struct{
+				Version string
+				Flags string
+			}{
+			VERSION,
+			buff.String(),
+		}
+	
+		t, _ := template.New("help").Parse(t)
+		t.Execute(os.Stdout, data)
+	}
+
+	os.Exit(1)
 }

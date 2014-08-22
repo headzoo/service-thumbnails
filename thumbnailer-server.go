@@ -2,9 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/dulo-tech/thumbnailer/handlers"
@@ -67,28 +65,20 @@ func parseFlags() *thumbnailer.Options {
 
 	thumbnailer.VerboseOutput = opts.Verbose
 	if opts.PrintHelp {
-		printHelp(opts)
+		thumbnailer.PrintHelp(opts, serverHelpTemplate)
 	}
 
 	return opts
 }
 
-// printHelp() prints the command line help and exits.
-func printHelp(opts *thumbnailer.Options) {
-	if thumbnailer.VerboseOutput || opts.PrintHelp {
-		fmt.Printf("Thumbnailer Server v%s\n", thumbnailer.VERSION)
-		fmt.Println("")
-		fmt.Println("USAGE:")
-		fmt.Println("thumbnailer-server -h <host> -p <port>")
-		fmt.Println("")
-		fmt.Println("OPTIONS:")
-		flag.VisitAll(func(f *flag.Flag) {
-			fmt.Printf("\t-%s\t%s\n", f.Name, f.Usage)
-		})
-		fmt.Println("")
-		fmt.Println("EXAMPLE:")
-		fmt.Println("server -h 127.0.0.1 -p 3366")
-	}
+const serverHelpTemplate = `Thumbnailer HTTP Server v{{.Version}} - Video thumbnail generating HTTP server.
 
-	os.Exit(1)
-}
+USAGE:
+	thumbnailer-server -h <host> -p <port>
+
+OPTIONS:
+
+{{.Flags}}
+EXAMPLES:
+	server -h 127.0.0.1 -p 3366
+`

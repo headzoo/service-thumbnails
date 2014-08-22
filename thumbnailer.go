@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"strings"
 
@@ -69,49 +68,16 @@ func parseFlags() *thumbnailer.Options {
 
 	thumbnailer.VerboseOutput = opts.Verbose
 	if opts.PrintHelp {
-		printHelp(opts)
+		thumbnailer.PrintHelp(opts, thumbnailerHelpTemplate)
 	}
 	if opts.InFile == "" || opts.OutFile == "" || opts.ThumbType == "" {
-		printHelp(opts)
+		thumbnailer.PrintHelp(opts, thumbnailerHelpTemplate)
 	}
 	if opts.ThumbType != "sprite" && opts.ThumbType != "simple" {
-		printHelp(opts)
+		thumbnailer.PrintHelp(opts, thumbnailerHelpTemplate)
 	}
 
 	return opts
-}
-
-// printHelp() prints the command line help and exits.
-func printHelp(opts *thumbnailer.Options) {
-	if thumbnailer.VerboseOutput || opts.PrintHelp {
-		fmt.Printf("Thumbnailer v%s\n", thumbnailer.VERSION)
-		fmt.Println("")
-		fmt.Println("USAGE:")
-		fmt.Println("thumbnailer -t <sprite|simple> -i <video> -o <image>")
-		fmt.Println("")
-		fmt.Println("<sprite|simple> determines the type of thumbnail being generated. Either")
-		fmt.Println("a sprite or a simple thumbnail. Simple is the default when not specified.")
-		fmt.Println("")
-		fmt.Println("<video> is one or more source videos. Separate multiple videos with commas.")
-		fmt.Println("")
-		fmt.Println("<image> may contain the place holders {name} and {type} which correspond")
-		fmt.Println("to the name of the source video (without file extension) and the type of")
-		fmt.Println("of thumbnail. One of 'sprite' or 'simple'. The <image> may also contain")
-		fmt.Println("the verb %d which will be replaced with the file number. See the fmt package")
-		fmt.Println("for more information on verbs.")
-		fmt.Println("")
-		fmt.Println("OPTIONS:")
-		flag.VisitAll(func(f *flag.Flag) {
-			fmt.Printf("\t-%-8s%s\n", f.Name, f.Usage)
-		})
-		fmt.Println("")
-		fmt.Println("EXAMPLES:")
-		fmt.Println("thumbnailer -t sprite -i source.mp4 -o thumb.jpg")
-		fmt.Println("thumbnailer -i source1.mp4,source2.mp4 -o out%02d.jpg")
-		fmt.Println("thumbnailer -t sprite -i source.mp4 -o thumb{name}{type}.jpg")
-	}
-
-	os.Exit(1)
 }
 
 // splitFiles converts a comma separated list of files into an array of file names.
@@ -136,3 +102,29 @@ func fileExists(file string) bool {
 	_, err := os.Stat(file)
 	return !os.IsNotExist(err)
 }
+
+const thumbnailerHelpTemplate = `Thumbnailer v{{.Version}} - Used to generate thumbnails from videos.
+
+USAGE:
+	thumbnailer -t <sprite|simple> -i <video> -o <image>
+
+	<sprite|simple> determines the type of thumbnail being generated. Either
+	a sprite or a simple thumbnail. Simple is the default when not specified.
+	
+	<video> is one or more source videos. Separate multiple videos with commas.
+	
+	<image> may contain the place holders {name} and {type} which correspond
+	to the name of the source video (without file extension) and the type of
+	of thumbnail. One of 'sprite' or 'simple'. The <image> may also contain
+	the verb %d which will be replaced with the file number. See the fmt package
+	for more information on verbs.
+
+OPTIONS:
+
+{{.Flags}}
+EXAMPLES:
+
+	thumbnailer -t sprite -i source.mp4 -o thumb.jpg
+	thumbnailer -i source1.mp4,source2.mp4 -o out%02d.jpg
+	thumbnailer -t sprite -i source.mp4 -o thumb{name}{type}.jpg
+`
