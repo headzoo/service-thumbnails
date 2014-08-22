@@ -159,8 +159,6 @@ func ExecuteHelpTemplate() {
 	os.Exit(1)
 }
 
-
-
 // helpTemplate is the template used for displaying command line help.
 const helpTemplate = `Thumbnailer v{{.Version}} - Used to generate thumbnails from videos.
 
