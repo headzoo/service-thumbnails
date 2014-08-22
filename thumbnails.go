@@ -22,6 +22,9 @@ func main() {
 	opts := config()
 	if opts.PrintHelp {
 		executeHelpTemplate("")
+	} else if opts.PrintVersion {
+		fmt.Println(core.BuildInfo())
+		os.Exit(0)
 	}
 
 	switch opts.Mode {
@@ -57,13 +60,13 @@ func config() *core.Options {
 	}
 
 	/*
-	set := flag.NewFlagSet("conf", flag.ContinueOnError)
-	set.StringVar(
-		&confCli,
-		"conf",
-		"",
-		"Path to configuration file.")
-	set.Parse(os.Args[1:])
+		set := flag.NewFlagSet("conf", flag.ContinueOnError)
+		set.StringVar(
+			&confCli,
+			"conf",
+			"",
+			"Path to configuration file.")
+		set.Parse(os.Args[1:])
 	*/
 	if confCli != "" {
 		readConfigFile(confCli, core.Opts)
@@ -87,6 +90,11 @@ func config() *core.Options {
 		"help",
 		core.Opts.PrintHelp,
 		"Display command help.")
+	flag.BoolVar(
+		&core.Opts.PrintVersion,
+		"version",
+		core.Opts.PrintVersion,
+		"Display the app version and quit.")
 	flag.BoolVar(
 		&core.Opts.Quiet,
 		"q",
@@ -145,11 +153,11 @@ func executeHelpTemplate(errMsg string) {
 	})
 
 	data := struct {
-		Version string
-		Flags   string
-		Error   string
+		BuildInfo string
+		Flags     string
+		Error     string
 	}{
-		core.AppVersion,
+		core.BuildInfo(),
 		buff.String(),
 		errMsg,
 	}
@@ -236,7 +244,7 @@ func anyEmptyString(values ...string) bool {
 }
 
 // helpTemplate is the template used for displaying command line help.
-const helpTemplate = `Thumbnailer v{{.Version}} - Used to generate thumbnails from videos.
+const helpTemplate = `{{.BuildInfo}} - Used to generate thumbnails from videos.
 
 {{if .Error}}
 {{.Error}}
