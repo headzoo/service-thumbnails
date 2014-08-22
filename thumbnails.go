@@ -25,18 +25,18 @@ func main() {
 	}
 	if core.Opts.Mode == "cli" {
 		if core.Opts.InFile == "" || core.Opts.OutFile == "" || core.Opts.ThumbType == "" {
-			core.VPrintfError("Missing -i, -o, or -t.")
+			core.VErrorf("Missing -i, -o, or -t.")
 			executeHelpTemplate()
 		}
 		if core.Opts.ThumbType != "sprite" && core.Opts.ThumbType != "simple" {
-			core.VPrintfError("Invalid thumbnail type.")
+			core.VErrorf("Invalid thumbnail type.")
 			executeHelpTemplate()
 		}
 		cli.Go()
 	} else if core.Opts.Mode == "http" {
 		http.Go()
 	} else {
-		core.VPrintfError("Invalid mode.")
+		core.VErrorf("Invalid mode.")
 		executeHelpTemplate()
 	}
 }

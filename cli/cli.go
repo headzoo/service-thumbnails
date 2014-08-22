@@ -27,7 +27,7 @@ func splitFiles(inFiles string) []string {
 
 	for _, file := range files {
 		if !core.FileExists(file) {
-			core.VPrintfError("The input file %q does not exist.", file)
+			core.VErrorf("The input file %q does not exist.", file)
 			os.Exit(1)
 		}
 	}

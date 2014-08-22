@@ -65,7 +65,7 @@ func VPrintf(msg string, a ...interface{}) {
 }
 
 // VPrintfError prints the given message to stderr when verbose output is turned on.
-func VPrintfError(msg string, a ...interface{}) {
+func VErrorf(msg string, a ...interface{}) {
 	if !Opts.Quiet {
 		fmt.Fprintf(os.Stderr, msg+"\n", a...)
 	}
