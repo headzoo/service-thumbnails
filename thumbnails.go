@@ -174,6 +174,8 @@ func readConfigFile(file string, opts *core.Options) {
 			if len(parts) != 2 {
 				panic(fmt.Sprintf("Invalid configuration at line %d: %q", line, text))
 			}
+			parts[0] = strings.Trim(parts[0], " \t")
+			parts[1] = strings.Trim(parts[1], " \t")
 
 			field := st.FieldByName(parts[0])
 			if field.IsValid() && field.CanSet() {
