@@ -164,7 +164,10 @@ func ExecuteHelpTemplate() {
 // helpTemplate is the template used for displaying command line help.
 const helpTemplate = `Thumbnailer v{{.Version}} - Used to generate thumbnails from videos.
 
-USAGE:
+OPTIONS:
+
+{{.Flags}}
+CLI USAGE:
 	thumbnailer -t <sprite|simple> -i <video> -o <image>
 
 	<sprite|simple> determines the type of thumbnail being generated. Either
@@ -178,24 +181,15 @@ USAGE:
 	the verb %d which will be replaced with the file number. See the fmt package
 	for more information on verbs.
 
-OPTIONS:
-
-{{.Flags}}
-EXAMPLES:
+CLI EXAMPLES:
 
 	thumbnailer -t sprite -i source.mp4 -o thumb.jpg
 	thumbnailer -i source1.mp4,source2.mp4 -o out%02d.jpg
 	thumbnailer -t sprite -i source.mp4 -o thumb{name}{type}.jpg
 
+SERVER USAGE:
+	thumbnailer -m http -h <host> -p <port>
 
-	Thumbnailer HTTP Server v{{.Version}} - Video thumbnail generating HTTP server.
-
-USAGE:
-	thumbnailer-server -h <host> -p <port>
-
-OPTIONS:
-
-{{.Flags}}
-EXAMPLES:
-	server -h 127.0.0.1 -p 3366
+SERVER EXAMPLES:
+	thumbnailer -m http -h 127.0.0.1 -p 3366
 `
