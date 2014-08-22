@@ -27,6 +27,9 @@ const (
 	OptDefaultPrintHelp   = false
 )
 
+// ThumbTypes stores the possible thumbnail types that may be generated.
+var ValidThumbTypes = []string{"sprite", "simple"}
+
 // Options stores the command line options.
 type Options struct {
 	Mode        string

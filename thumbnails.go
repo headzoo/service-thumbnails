@@ -19,21 +19,23 @@ import (
 )
 
 func main() {
-	config()
-	if core.Opts.PrintHelp {
+	opts := config()
+	if opts.PrintHelp {
 		executeHelpTemplate("")
 	}
-	if core.Opts.Mode == "cli" {
-		if core.Opts.InFile == "" || core.Opts.OutFile == "" || core.Opts.ThumbType == "" {
-			executeHelpTemplate("Missing -i, -o, or -t.")
+
+	switch opts.Mode {
+	case "cli":
+		if anyEmptyString(opts.InFile, opts.OutFile, opts.ThumbType) {
+			executeHelpTemplate("Missing InFile, OutFile, or ThumbType.")
 		}
-		if core.Opts.ThumbType != "sprite" && core.Opts.ThumbType != "simple" {
+		if !inArrayString(opts.ThumbType, core.ValidThumbTypes) {
 			executeHelpTemplate("Invalid thumbnail type.")
 		}
 		cli.Go()
-	} else if core.Opts.Mode == "http" {
+	case "http":
 		http.Go()
-	} else {
+	default:
 		executeHelpTemplate("Invalid mode.")
 	}
 }
@@ -45,7 +47,7 @@ func main() {
 // directory. Then tries reading from /etc/service-thumbnails.conf. Finally
 // parses the command line arguments. The command line arguments override
 // configuration file values.
-func config() {
+func config() *core.Options {
 	confCli := ""
 	confHome := ""
 	confEtc := "/etc/service-thumbnails.conf"
@@ -54,6 +56,7 @@ func config() {
 		confHome = path.Join(u.HomeDir, "/.service-thumbnails.conf")
 	}
 
+	/*
 	set := flag.NewFlagSet("conf", flag.ContinueOnError)
 	set.StringVar(
 		&confCli,
@@ -61,6 +64,7 @@ func config() {
 		"",
 		"Path to configuration file.")
 	set.Parse(os.Args[1:])
+	*/
 	if confCli != "" {
 		readConfigFile(confCli, core.Opts)
 	} else if core.FileExists(confHome) {
@@ -129,6 +133,8 @@ func config() {
 		core.Opts.Port,
 		"The port to listen on.")
 	flag.Parse()
+
+	return core.Opts
 }
 
 // ExecuteHelpTemplate() prints the command line help using the given template and exits.
@@ -207,6 +213,26 @@ func readConfigFile(file string, opts *core.Options) {
 	if err := scanner.Err(); err != nil {
 		panic(err)
 	}
+}
+
+// inArrayString returns a boolean value indicating whether the needle is found in the haystack.
+func inArrayString(needle string, haystack []string) bool {
+	for _, val := range haystack {
+		if needle == val {
+			return true
+		}
+	}
+	return false
+}
+
+// anyEmpty returns a boolean value indicating whether any of the given arguments are empty.
+func anyEmptyString(values ...string) bool {
+	for _, val := range values {
+		if val == "" {
+			return true
+		}
+	}
+	return false
 }
 
 // helpTemplate is the template used for displaying command line help.
