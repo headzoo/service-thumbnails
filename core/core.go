@@ -7,7 +7,7 @@ import (
 
 const (
 	// AppVersion is the thumbnailer application version.
-	AppVersion = "0.1"
+	AppVersion = "0.2"
 	// ThumbCountPerSprite is the default number of thumbs to include in each sprite.
 	ThumbCountPerSprite = 30
 )
