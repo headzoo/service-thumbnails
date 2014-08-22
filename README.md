@@ -2,6 +2,15 @@ service-thumbnails
 ==================
 Used to create thumbnails from videos. Both normal thumbnails, and sprites. The app can run in one of two modes: cli and http server.
 
+* [Requirements](#requirements)
+* [Thumbnail Types](#thumbnail-types)
+  * [Simple](#simple)
+  * [Sprite](#sprite)
+* [CLI Usage](#cli-usage)
+* [HTTP Usage](#http-usage)
+* [Configuration File](#configuration-file)
+* [TODO](#todo)
+
 
 ### Requirements
 * FFmpeg
@@ -17,7 +26,8 @@ Linux binaries may be downloaded from the [releases page](https://github.com/dul
 
 
 ### Thumbnail Types
-Thumbnailer currently creates two kinds of thumbnails: simple and sprite.
+Two types of thumbnails may be generated: simple and sprite.
+
 
 ##### Simple
 A simple thumbnail is a single frame from the video. By default the size (width/height) of the thumbnail is the size of the video frame. A video with frames 640x480 will result in a thumbnail that is 640x480. The size can be adjusted by using the 'width' option from the command line app or HTTP server.
