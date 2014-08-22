@@ -244,7 +244,7 @@ func anyEmptyString(values ...string) bool {
 }
 
 // helpTemplate is the template used for displaying command line help.
-const helpTemplate = `{{.BuildInfo}} - Used to generate thumbnails from videos.
+const helpTemplate = `{{.BuildInfo}}
 
 {{if .Error}}
 {{.Error}}

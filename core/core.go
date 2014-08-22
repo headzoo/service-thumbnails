@@ -8,8 +8,6 @@ import (
 const (
 	// AppName is the full name of the application.
 	AppName = "server-thumbnails"
-	// AppVersion is the thumbnailer application version.
-	AppVersion = "0.2"
 	// ThumbCountPerSprite is the default number of thumbs to include in each sprite.
 	ThumbCountPerSprite = 30
 )
@@ -68,7 +66,7 @@ var Opts = &Options{
 // BuildInfo returns a string with the build information.
 func BuildInfo() string {
 	return fmt.Sprintf(
-		"%s %s.%s-%s-%s",
+		"%s %s.b%s %s %s",
 		AppName,
 		AppVersion,
 		AppBuildNumber,
