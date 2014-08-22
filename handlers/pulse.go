@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/dulo-tech/thumbnailer/thumbnailer"
+	"github.com/dulo-tech/thumbnailer/core"
 	"net/http"
 	"strconv"
 
@@ -14,7 +14,7 @@ type PulseHandler struct {
 }
 
 // NewPulse creates and returns a new PulseHandler instance.
-func NewPulse(opts *thumbnailer.Options) *PulseHandler {
+func NewPulse(opts *core.Options) *PulseHandler {
 	return &PulseHandler{
 		Handler: *New(opts),
 	}
@@ -22,7 +22,7 @@ func NewPulse(opts *thumbnailer.Options) *PulseHandler {
 
 // ServeHTTP implements http.Handler.ServeHTTP.
 func (h *PulseHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	p := pulse.New(r.RemoteAddr, thumbnailer.AppVersion)
+	p := pulse.New(r.RemoteAddr, core.AppVersion)
 	p.WhiteList = pulseIPWhiteList
 	p.RequestHeaders = make(pulse.Headers, len(r.Header))
 	for key, headers := range r.Header {

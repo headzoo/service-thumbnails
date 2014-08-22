@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/dulo-tech/thumbnailer/thumbnailer"
+	"github.com/dulo-tech/thumbnailer/core"
 )
 
 // HelpData stores template variables for the help page.
@@ -19,7 +19,7 @@ type HelpHandler struct {
 }
 
 // NewHelp creates and returns a new HelpHandler instance.
-func NewHelp(opts *thumbnailer.Options) *HelpHandler {
+func NewHelp(opts *core.Options) *HelpHandler {
 	return &HelpHandler{
 		Handler: *New(opts),
 	}

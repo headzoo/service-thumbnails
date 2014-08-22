@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"github.com/dulo-tech/thumbnailer/ffmpeg"
-	"github.com/dulo-tech/thumbnailer/thumbnailer"
+	"github.com/dulo-tech/thumbnailer/core"
 	"net/http"
 )
 
@@ -12,7 +12,7 @@ type SpriteHandler struct {
 }
 
 // NewSprite creates and returns a new SpriteHandler instance.
-func NewSprite(opts *thumbnailer.Options) *SpriteHandler {
+func NewSprite(opts *core.Options) *SpriteHandler {
 	return &SpriteHandler{
 		Handler: *New(opts),
 	}

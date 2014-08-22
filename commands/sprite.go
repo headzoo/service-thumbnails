@@ -2,7 +2,7 @@ package commands
 
 import (
 	"github.com/dulo-tech/thumbnailer/ffmpeg"
-	"github.com/dulo-tech/thumbnailer/thumbnailer"
+	"github.com/dulo-tech/thumbnailer/core"
 )
 
 // SpriteCommand is used to generate sprite thumbnails from the command line.
@@ -11,7 +11,7 @@ type SpriteCommand struct {
 }
 
 // NewSprite creates and returns a new SpriteCommand instance.
-func NewSprite(opts *thumbnailer.Options) *SpriteCommand {
+func NewSprite(opts *core.Options) *SpriteCommand {
 	return &SpriteCommand{
 		Command: *newCommand(opts),
 	}
@@ -45,5 +45,5 @@ func (c *SpriteCommand) Execute(inFile, outFile string) {
 		return
 	}
 
-	thumbnailer.VPrintf("Sprite thumbnail for video %q written to %q.", inFile, outFile)
+	core.VPrintf("Sprite thumbnail for video %q written to %q.", inFile, outFile)
 }

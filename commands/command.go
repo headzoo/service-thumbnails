@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/dulo-tech/thumbnailer/thumbnailer"
+	"github.com/dulo-tech/thumbnailer/core"
 )
 
 type ChannelFinished chan bool
@@ -15,13 +15,13 @@ type Commander interface {
 
 // Command is used to create thumbs from the command line.
 type Command struct {
-	opts         *thumbnailer.Options
+	opts         *core.Options
 	chanFinished *ChannelFinished
 	chanError    *ChannelError
 }
 
 // New creates and returns a new Command instance.
-func newCommand(opts *thumbnailer.Options) *Command {
+func newCommand(opts *core.Options) *Command {
 	return &Command{
 		opts: opts,
 	}

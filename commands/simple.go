@@ -2,7 +2,7 @@ package commands
 
 import (
 	"github.com/dulo-tech/thumbnailer/ffmpeg"
-	"github.com/dulo-tech/thumbnailer/thumbnailer"
+	"github.com/dulo-tech/thumbnailer/core"
 )
 
 // SimpleCommand is used to generate simple thumbnails from the command line.
@@ -11,7 +11,7 @@ type SimpleCommand struct {
 }
 
 // NewSimple creates and returns a new SimpleCommand instance.
-func NewSimple(opts *thumbnailer.Options) *SimpleCommand {
+func NewSimple(opts *core.Options) *SimpleCommand {
 	return &SimpleCommand{
 		Command: *newCommand(opts),
 	}
@@ -32,5 +32,5 @@ func (c *SimpleCommand) Execute(inFile, outFile string) {
 		return
 	}
 
-	thumbnailer.VPrintf("Simple thumbnail for video %q written to %q.", inFile, outFile)
+	core.VPrintf("Simple thumbnail for video %q written to %q.", inFile, outFile)
 }

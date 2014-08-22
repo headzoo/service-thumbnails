@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"github.com/dulo-tech/thumbnailer/ffmpeg"
-	"github.com/dulo-tech/thumbnailer/thumbnailer"
+	"github.com/dulo-tech/thumbnailer/core"
 	"net/http"
 )
 
@@ -12,7 +12,7 @@ type SimpleHandler struct {
 }
 
 // NewPulse creates and returns a new SimpleHandler instance.
-func NewSimple(opts *thumbnailer.Options) *SimpleHandler {
+func NewSimple(opts *core.Options) *SimpleHandler {
 	return &SimpleHandler{
 		Handler: *New(opts),
 	}

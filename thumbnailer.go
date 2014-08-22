@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/dulo-tech/thumbnailer/commands"
-	"github.com/dulo-tech/thumbnailer/thumbnailer"
+	"github.com/dulo-tech/thumbnailer/core"
 )
 
 func main() {
@@ -22,33 +22,33 @@ func main() {
 }
 
 // parseFlags parses the command line option flags.
-func parseFlags() *thumbnailer.Options {
-	opts := thumbnailer.FlagOptions()
+func parseFlags() *core.Options {
+	opts := core.FlagOptions()
 	flag.StringVar(
 		&opts.ThumbType,
 		"t",
-		thumbnailer.OptDefaultThumbType,
+		core.OptDefaultThumbType,
 		"The type of thumbnail to generate. 'simple' is the default.")
 	flag.StringVar(
 		&opts.InFile,
 		"i",
-		thumbnailer.OptDefaultInFile,
+		core.OptDefaultInFile,
 		"The input video file. Separate multiple files with a comma.")
 	flag.StringVar(
 		&opts.OutFile,
 		"o",
-		thumbnailer.OptDefaultOutFile,
+		core.OptDefaultOutFile,
 		"The output image file.")
 	flag.Parse()
 
 	if opts.PrintHelp {
-		thumbnailer.ExecuteHelpTemplate(opts, thumbnailerHelpTemplate)
+		core.ExecuteHelpTemplate(opts, thumbnailerHelpTemplate)
 	}
 	if opts.InFile == "" || opts.OutFile == "" || opts.ThumbType == "" {
-		thumbnailer.ExecuteHelpTemplate(opts, thumbnailerHelpTemplate)
+		core.ExecuteHelpTemplate(opts, thumbnailerHelpTemplate)
 	}
 	if opts.ThumbType != "sprite" && opts.ThumbType != "simple" {
-		thumbnailer.ExecuteHelpTemplate(opts, thumbnailerHelpTemplate)
+		core.ExecuteHelpTemplate(opts, thumbnailerHelpTemplate)
 	}
 	return opts
 }
@@ -62,7 +62,7 @@ func splitFiles(inFiles string) []string {
 
 	for _, file := range files {
 		if !fileExists(file) {
-			thumbnailer.VPrintfError("The input file %q does not exist.", file)
+			core.VPrintfError("The input file %q does not exist.", file)
 			os.Exit(1)
 		}
 	}

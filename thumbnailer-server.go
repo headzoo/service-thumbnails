@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/dulo-tech/thumbnailer/handlers"
-	"github.com/dulo-tech/thumbnailer/thumbnailer"
+	"github.com/dulo-tech/thumbnailer/core"
 	"github.com/gorilla/mux"
 )
 
@@ -19,7 +19,7 @@ func main() {
 	router.Handle("/help", handlers.NewHelp(opts)).Methods("GET")
 	router.Handle("/pulse", handlers.NewPulse(opts)).Methods("GET")
 
-	thumbnailer.VPrintf("Listening for requests on %s:%d...", opts.Host, opts.Port)
+	core.VPrintf("Listening for requests on %s:%d...", opts.Host, opts.Port)
 	conn := opts.Host + ":" + strconv.Itoa(opts.Port)
 	err := http.ListenAndServe(conn, router)
 	if err != nil {
@@ -28,22 +28,22 @@ func main() {
 }
 
 // parseFlags parses the command line option flags.
-func parseFlags() *thumbnailer.Options {
-	opts := thumbnailer.FlagOptions()
+func parseFlags() *core.Options {
+	opts := core.FlagOptions()
 	flag.StringVar(
 		&opts.Host,
 		"h",
-		thumbnailer.OptDefaultHost,
+		core.OptDefaultHost,
 		"The host name to listen on.")
 	flag.IntVar(
 		&opts.Port,
 		"p",
-		thumbnailer.OptDefaultPort,
+		core.OptDefaultPort,
 		"The port to listen on.")
 	flag.Parse()
 
 	if opts.PrintHelp {
-		thumbnailer.ExecuteHelpTemplate(opts, serverHelpTemplate)
+		core.ExecuteHelpTemplate(opts, serverHelpTemplate)
 	}
 	return opts
 }

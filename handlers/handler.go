@@ -7,7 +7,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/dulo-tech/thumbnailer/thumbnailer"
+	"github.com/dulo-tech/thumbnailer/core"
 	"github.com/rakyll/magicmime"
 )
 
@@ -59,11 +59,11 @@ type Upload struct {
 // Handler is the default HTTP handler.
 type Handler struct {
 	// opts is the command line options.
-	opts *thumbnailer.Options
+	opts *core.Options
 }
 
 // New creates and returns a new Handler instance.
-func New(opts *thumbnailer.Options) *Handler {
+func New(opts *core.Options) *Handler {
 	return &Handler{
 		opts: opts,
 	}
@@ -84,7 +84,7 @@ func getFile(w http.ResponseWriter, r *http.Request) *Upload {
 		return nil
 	}
 
-	thumbnailer.VPrintf("Got upload %#v\n", files[0])
+	core.VPrintf("Got upload %#v\n", files[0])
 	return &files[0]
 }
 

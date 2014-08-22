@@ -1,4 +1,4 @@
-package thumbnailer
+package core
 
 import (
 	"bytes"
