@@ -21,23 +21,20 @@ import (
 func main() {
 	config()
 	if core.Opts.PrintHelp {
-		executeHelpTemplate()
+		executeHelpTemplate("")
 	}
 	if core.Opts.Mode == "cli" {
 		if core.Opts.InFile == "" || core.Opts.OutFile == "" || core.Opts.ThumbType == "" {
-			core.VErrorf("Missing -i, -o, or -t.")
-			executeHelpTemplate()
+			executeHelpTemplate("Missing -i, -o, or -t.")
 		}
 		if core.Opts.ThumbType != "sprite" && core.Opts.ThumbType != "simple" {
-			core.VErrorf("Invalid thumbnail type.")
-			executeHelpTemplate()
+			executeHelpTemplate("Invalid thumbnail type.")
 		}
 		cli.Go()
 	} else if core.Opts.Mode == "http" {
 		http.Go()
 	} else {
-		core.VErrorf("Invalid mode.")
-		executeHelpTemplate()
+		executeHelpTemplate("Invalid mode.")
 	}
 }
 
@@ -135,7 +132,7 @@ func config() {
 }
 
 // ExecuteHelpTemplate() prints the command line help using the given template and exits.
-func executeHelpTemplate() {
+func executeHelpTemplate(errMsg string) {
 	buff := bytes.Buffer{}
 	flag.VisitAll(func(f *flag.Flag) {
 		buff.WriteString(fmt.Sprintf("\t-%-8s%s\n", f.Name, f.Usage))
@@ -144,9 +141,11 @@ func executeHelpTemplate() {
 	data := struct {
 		Version string
 		Flags   string
+		Error   string
 	}{
 		core.AppVersion,
 		buff.String(),
+		errMsg,
 	}
 
 	t, _ := template.New("help").Parse(helpTemplate)
@@ -211,6 +210,9 @@ func readConfigFile(file string, opts *core.Options) {
 // helpTemplate is the template used for displaying command line help.
 const helpTemplate = `Thumbnailer v{{.Version}} - Used to generate thumbnails from videos.
 
+{{if .Error}}
+{{.Error}}
+{{end}}
 The app can run as a command line app or as an http server. Use the -m
 switch to change modes. See usage and examples of each below.
 
