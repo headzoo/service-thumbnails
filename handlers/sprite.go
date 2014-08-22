@@ -23,7 +23,7 @@ func (h *SpriteHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	width := DEFAULT_WIDTH_SPRITE
+	width := DefaultSpriteWidth
 	skip := core.Opts.SkipSeconds
 	count := core.Opts.Count
 

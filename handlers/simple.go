@@ -23,7 +23,7 @@ func (h *SimpleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	width := DEFAULT_WIDTH_SIMPLE
+	width := DefaultSimpleWidth
 	skip := core.Opts.SkipSeconds
 
 	query := r.URL.Query()
