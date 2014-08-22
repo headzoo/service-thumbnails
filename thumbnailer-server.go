@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/dulo-tech/thumbnailer/handlers"
 	"github.com/dulo-tech/thumbnailer/core"
+	"github.com/dulo-tech/thumbnailer/handlers"
 	"github.com/gorilla/mux"
 )
 

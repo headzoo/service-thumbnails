@@ -1,8 +1,8 @@
 package commands
 
 import (
-	"github.com/dulo-tech/thumbnailer/ffmpeg"
 	"github.com/dulo-tech/thumbnailer/core"
+	"github.com/dulo-tech/thumbnailer/ffmpeg"
 )
 
 // SpriteCommand is used to generate sprite thumbnails from the command line.
