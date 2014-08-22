@@ -43,7 +43,19 @@ type Options struct {
 }
 
 // opts stores the command line options.
-var Opts = &Options{}
+var Opts = &Options{
+	Mode:        OptDefaultMode,
+	Host:        OptDefaultHost,
+	Port:        OptDefaultPort,
+	ThumbType:   OptDefaultThumbType,
+	InFile:      OptDefaultInFile,
+	OutFile:     OptDefaultOutFile,
+	Width:       OptDefaultWidth,
+	SkipSeconds: OptDefaultSkipSeconds,
+	Count:       OptDefaultCount,
+	Quiet:       OptDefaultQuiet,
+	PrintHelp:   OptDefaultPrintHelp,
+}
 
 // VPrintf prints the given message when verbose output is turned on.
 func VPrintf(msg string, a ...interface{}) {
@@ -57,4 +69,10 @@ func VPrintfError(msg string, a ...interface{}) {
 	if !Opts.Quiet {
 		fmt.Fprintf(os.Stderr, msg+"\n", a...)
 	}
+}
+
+// FileExists returns whether the given file exists.
+func FileExists(file string) bool {
+	_, err := os.Stat(file)
+	return !os.IsNotExist(err)
 }

@@ -26,17 +26,11 @@ func splitFiles(inFiles string) []string {
 	}
 
 	for _, file := range files {
-		if !fileExists(file) {
+		if !core.FileExists(file) {
 			core.VPrintfError("The input file %q does not exist.", file)
 			os.Exit(1)
 		}
 	}
 
 	return files
-}
-
-// fileExists returns whether the given file exists.
-func fileExists(file string) bool {
-	_, err := os.Stat(file)
-	return !os.IsNotExist(err)
 }
