@@ -164,6 +164,9 @@ func ExecuteHelpTemplate() {
 // helpTemplate is the template used for displaying command line help.
 const helpTemplate = `Thumbnailer v{{.Version}} - Used to generate thumbnails from videos.
 
+Thumbnailer can run as a command line app or as an http server. Use the -m
+switch to change modes. See usage and examples of each below.
+
 OPTIONS:
 
 {{.Flags}}
@@ -187,9 +190,9 @@ CLI EXAMPLES:
 	thumbnailer -i source1.mp4,source2.mp4 -o out%02d.jpg
 	thumbnailer -t sprite -i source.mp4 -o thumb{name}{type}.jpg
 
-SERVER USAGE:
+HTTP USAGE:
 	thumbnailer -m http -h <host> -p <port>
 
-SERVER EXAMPLES:
+HTTP EXAMPLES:
 	thumbnailer -m http -h 127.0.0.1 -p 3366
 `
