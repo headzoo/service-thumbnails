@@ -63,6 +63,11 @@ func incError() {
 	numErrors++
 }
 
+// pulseWhiteList returns the pulse ip white list.
+func pulseWhiteList() []string {
+	return pulseIPWhiteList
+}
+
 // getFile returns the uploaded file.
 func getFile(w http.ResponseWriter, r *http.Request) *Upload {
 	files, _ := writeUploadedFiles(r)
