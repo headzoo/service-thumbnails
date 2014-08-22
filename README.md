@@ -1,6 +1,6 @@
 thumbnailer
 ===========
-Used to create thumbnails from videos. Both normal thumbnails, and sprites. Two apps are provided: thumbnailer, which is a command line application, and thumbnailer-server, which is an HTTP server that provides an API for creating thumbnails.
+Used to create thumbnails from videos. Both normal thumbnails, and sprites. The app can run in one of two modes: cli and http server. Thumbnailer is used to generate thumbnails from the command line when in cli mode, which is the default. In http mode thumbnailer runs as an HTTP server capable of handling requests to generate thumbnails.
 
 
 ### Requirements
@@ -30,7 +30,7 @@ Example:
 ![Example Sprite](http://i.imgur.com/xSRxNbs.jpg)
 
 
-### Command Line Usage
+### CLI Usage
 Generating a sprite:  
 `thumbnailer -t sprite -i video.mp4 -o thumb.jpg`
 
@@ -41,9 +41,9 @@ Generating thumbnails from several videos at once:
 `thumbnailer -t simple -i video1.mp4,video2.mp4,video3.mp4 -o thumb%02.jpg`
 
 
-### Server Usage
-First start the server using:  
-`thumbnailer-server -h 127.0.0.1 -p 8888`
+### HTTP Usage
+Start thumbnailer using the `-m http` switch:  
+`thumbnailer -m http -h 127.0.0.1 -p 8888`
 
 Then upload video files to the server. For example using curl:  
 `curl --form video=@video.mp4 -o thumb.jpg http://127.0.0.1:8888/thumbnail/simple`
