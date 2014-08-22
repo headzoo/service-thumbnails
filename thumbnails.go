@@ -106,9 +106,9 @@ func ExecuteHelpTemplate() {
 	})
 
 	data := struct {
-			Version string
-			Flags   string
-		}{
+		Version string
+		Flags   string
+	}{
 		core.AppVersion,
 		buff.String(),
 	}

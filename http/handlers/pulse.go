@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/dulo-tech/service-thumbnails/core"
 	"github.com/dulo-tech/go-pulse/pulse"
+	"github.com/dulo-tech/service-thumbnails/core"
 )
 
 // PulseHandler is an HTTP handler for the pulse protocol.
