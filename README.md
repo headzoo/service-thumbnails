@@ -33,18 +33,18 @@ Example:
 
 ### CLI Usage
 Generating a sprite:  
-`thumbnailer -t sprite -i video.mp4 -o thumb.jpg`
+`service-thumbnails -t sprite -i video.mp4 -o thumb.jpg`
 
 Generating a simple thumbnail:  
-`thumbnailer -t simple -i video.mp4 -o thumb.jpg`
+`service-thumbnails -t simple -i video.mp4 -o thumb.jpg`
 
 Generating thumbnails from several videos at once:  
-`thumbnailer -t simple -i video1.mp4,video2.mp4,video3.mp4 -o thumb%02.jpg`
+`service-thumbnails -t simple -i video1.mp4,video2.mp4,video3.mp4 -o thumb%02.jpg`
 
 
 ### HTTP Usage
 Start thumbnailer using the `-m http` switch:  
-`thumbnailer -m http -h 127.0.0.1 -p 8888`
+`service-thumbnails -m http -h 127.0.0.1 -p 8888`
 
 Then upload video files to the server. For example using curl:  
 `curl --form video=@video.mp4 -o thumb.jpg http://127.0.0.1:8888/thumbnail/simple`
