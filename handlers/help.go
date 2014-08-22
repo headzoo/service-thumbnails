@@ -1,9 +1,9 @@
 package handlers
 
 import (
+	"github.com/dulo-tech/thumbnailer/core"
 	"html/template"
 	"net/http"
-	"github.com/dulo-tech/thumbnailer/core"
 )
 
 // HelpData stores template variables for the help page.

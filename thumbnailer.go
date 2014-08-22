@@ -39,7 +39,7 @@ func Init() {
 		core.OptDefaultOutFile,
 		"The output image file.")
 	flag.Parse()
-	
+
 	if core.Opts.PrintHelp {
 		core.ExecuteHelpTemplate(core.Opts, thumbnailerHelpTemplate)
 	}

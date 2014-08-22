@@ -1,9 +1,9 @@
 package handlers
 
 import (
+	"github.com/dulo-tech/thumbnailer/core"
 	"github.com/dulo-tech/thumbnailer/ffmpeg"
 	"net/http"
-	"github.com/dulo-tech/thumbnailer/core"
 )
 
 // SimpleHandler is an HTTP handler for creating simple thumbnails.
