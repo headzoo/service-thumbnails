@@ -43,7 +43,7 @@ func (r *Router) Route(ins string) error {
 	ce := make(ChannelError)
 	cmd.SetChannels(&cf, &ce)
 
-	thumbnailer.Verbose("Generating %d thumbnail(s).", len(r.inFiles))
+	thumbnailer.VPrintf("Generating %d thumbnail(s).", len(r.inFiles))
 	for i, fin := range r.inFiles {
 		base := strings.TrimSuffix(fin, filepath.Ext(fin))
 		fout := expandFileName(r.outFile, base, ins, i)

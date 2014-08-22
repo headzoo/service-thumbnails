@@ -23,60 +23,33 @@ func main() {
 
 // parseFlags parses the command line option flags.
 func parseFlags() *thumbnailer.Options {
-	var opts = &thumbnailer.Options{}
-
-	flag.BoolVar(
-		&opts.PrintHelp,
-		"help",
-		thumbnailer.OPT_PRINT_HELP,
-		"Display command help.")
-	flag.BoolVar(
-		&opts.Verbose,
-		"v",
-		thumbnailer.OPT_VERBOSE,
-		"Verbose output.")
+	opts := thumbnailer.FlagOptions()
 	flag.StringVar(
 		&opts.ThumbType,
 		"t",
-		thumbnailer.OPT_THUMB_TYPE,
+		thumbnailer.OptDefaultThumbType,
 		"The type of thumbnail to generate. 'simple' is the default.")
 	flag.StringVar(
 		&opts.InFile,
 		"i",
-		thumbnailer.OPT_IN_FILE,
+		thumbnailer.OptDefaultInFile,
 		"The input video file. Separate multiple files with a comma.")
 	flag.StringVar(
 		&opts.OutFile,
 		"o",
-		thumbnailer.OPT_OUT_FILE,
+		thumbnailer.OptDefaultOutFile,
 		"The output image file.")
-	flag.IntVar(
-		&opts.Width,
-		"w", thumbnailer.OPT_WIDTH,
-		"The thumbnail width. Overrides the built in defaults.")
-	flag.IntVar(
-		&opts.SkipSeconds,
-		"s",
-		thumbnailer.OPT_SKIP_SECONDS,
-		"Skip this number of seconds into the video before thumbnailing.")
-	flag.IntVar(
-		&opts.Count,
-		"c",
-		thumbnailer.OPT_COUNT,
-		"Number of thumbs to generate in a sprite. 30 is the default.")
 	flag.Parse()
 
-	thumbnailer.VerboseOutput = opts.Verbose
 	if opts.PrintHelp {
-		thumbnailer.PrintHelp(opts, thumbnailerHelpTemplate)
+		thumbnailer.ExecuteHelpTemplate(opts, thumbnailerHelpTemplate)
 	}
 	if opts.InFile == "" || opts.OutFile == "" || opts.ThumbType == "" {
-		thumbnailer.PrintHelp(opts, thumbnailerHelpTemplate)
+		thumbnailer.ExecuteHelpTemplate(opts, thumbnailerHelpTemplate)
 	}
 	if opts.ThumbType != "sprite" && opts.ThumbType != "simple" {
-		thumbnailer.PrintHelp(opts, thumbnailerHelpTemplate)
+		thumbnailer.ExecuteHelpTemplate(opts, thumbnailerHelpTemplate)
 	}
-
 	return opts
 }
 
@@ -89,7 +62,7 @@ func splitFiles(inFiles string) []string {
 
 	for _, file := range files {
 		if !fileExists(file) {
-			thumbnailer.VerboseError("The input file %q does not exist.", file)
+			thumbnailer.VPrintfError("The input file %q does not exist.", file)
 			os.Exit(1)
 		}
 	}

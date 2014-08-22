@@ -32,5 +32,5 @@ func (c *SimpleCommand) Execute(inFile, outFile string) {
 		return
 	}
 
-	thumbnailer.Verbose("Simple thumbnail for video %q written to %q.", inFile, outFile)
+	thumbnailer.VPrintf("Simple thumbnail for video %q written to %q.", inFile, outFile)
 }

@@ -45,5 +45,5 @@ func (c *SpriteCommand) Execute(inFile, outFile string) {
 		return
 	}
 
-	thumbnailer.Verbose("Sprite thumbnail for video %q written to %q.", inFile, outFile)
+	thumbnailer.VPrintf("Sprite thumbnail for video %q written to %q.", inFile, outFile)
 }

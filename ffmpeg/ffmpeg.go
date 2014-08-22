@@ -12,13 +12,10 @@ import (
 var (
 	// TempDirectory points to a working directory.
 	TempDirectory string
-
 	// CmdFFprobe is the ffprobe command to use.
 	CmdFFprobe string
-
 	// CmdFFmpeg is the ffmpeg command to use.
 	CmdFFmpeg string
-
 	// CmdConvert is the convert command to use.
 	CmdConvert string
 )

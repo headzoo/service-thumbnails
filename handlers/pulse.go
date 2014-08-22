@@ -22,7 +22,7 @@ func NewPulse(opts *thumbnailer.Options) *PulseHandler {
 
 // ServeHTTP implements http.Handler.ServeHTTP.
 func (h *PulseHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	p := pulse.New(r.RemoteAddr, thumbnailer.VERSION)
+	p := pulse.New(r.RemoteAddr, thumbnailer.AppVersion)
 	p.WhiteList = pulseIPWhiteList
 	p.RequestHeaders = make(pulse.Headers, len(r.Header))
 	for key, headers := range r.Header {
