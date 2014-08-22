@@ -55,10 +55,10 @@ Generating thumbnails from several videos at once:
 
 
 ### HTTP Usage
-Start thumbnailer using the `-m http` switch:  
+Start service-thumbnails using the `-m http` switch:  
 `service-thumbnails -m http -h 127.0.0.1 -p 8888`
 
-Then upload video files to the server. For example using curl:  
+The app will being running as an HTTP server. The server responds with thumbnails when videos are POSTed to it. For example using curl:  
 `curl --form video=@video.mp4 -o thumb.jpg http://127.0.0.1:8888/thumbnail/simple`
 
 The server returns the thumbnail, which curl writes to thumb.jpg. The server also has a help page which can be viewed at `http://127.0.0.1:8888/help`, and it implements the [Pulse Protocol](https://github.com/dulo-tech/amsterdam/wiki/Specification:-Pulse-Protocol).
